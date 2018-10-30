@@ -1,0 +1,35 @@
+
+// [#template.time_and_date] : generated from '[#template.xml_input_file]'.
+
+#pragma once
+
+#include "flow/schema.h"
+#include "flow/asset.h"
+#include "flow/state.h"
+#include "flow/debug.h"
+#include "test/test_state_base.h"
+
+namespace test
+{
+    namespace states
+    {
+        class [#template.state.type] : public test::StateBase
+        {
+        public:
+            // factory.
+            static const char* GetTypeName() { return "[#template.state.name]"; }
+            static [#template.state.type]* Instantiate(const flow::schema::State& schema, test::Game& game ) { return new [#template.state.type]( schema, game ); }
+
+        public:
+            [#template.state.type](const flow::schema::State& schema, test::Game& game);
+            ~[#template.state.type]();
+
+            virtual void Enter() override;
+            virtual std::string Update() override;
+            virtual void Exit() override;
+
+        private:
+
+        };
+    }
+}

@@ -1,0 +1,15 @@
+
+// [#template.time_and_date] : generated from '[#template.xml_input_file]'.
+
+#include "test/test_factory.h"
+#include "test/test_game.h"
+
+#include "[#template.state.filename].h"
+
+namespace test
+{
+    void generateStateFactoryTable( StateFactoryTable& state_factory_table, test::Game& game )
+    {
+        state_factory_table[states::[#template.factory.state.type]::GetTypeName()] = (&states::[#template.factory.state.type]::Instantiate);
+    }
+}

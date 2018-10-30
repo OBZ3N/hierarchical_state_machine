@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+
+<Flow>
+  <asset id="ui"/>
+  <asset id="wsa_startup"/>
+  <asset id="memory_manager"/>
+  <asset id="dll_components"/>
+  <asset id="task_scheduler"/>
+  <transition event="boot_sequence_completed" next_state="./PressStartScreen"/>
+  
+  <PressStartScreen>
+    <asset id="ui_start_screen"/>
+    <attribute music="intro.mp3"/>
+    <transition event="pressed_start" next_state="CheckInvite"/>
+    <transition event="inactivity_timeout" next_state="AttractScreen"/>
+  </PressStartScreen>
+
+  <AttractScreen>
+    <asset id="attract_videos"/>
+    <transition event="invite_accepted" next_state="PressStartScreen" />
+    <transition event="attract_timeout" next_state="PressStartScreen"/>
+    <transition event="start_pressed" next_state="PressStartScreen"/>
+  </AttractScreen>
+
+  <CheckInvite>
+    <transition event="join_invite" next_state="JoinInvite" />
+    <transition event="go_to_main_menu" next_state="FrontEnd/MainMenu" />
+  </CheckInvite>
+
+  <JoinInvite>
+    <transition event="create_session" next_state="CreateSession" />
+    <transition event="JoinSession" next_state="JoinSession" />
+  </JoinInvite>
+
+  <CreateSession>
+    <transition event="session_created" next_state="FrontEnd/Multiplayer/Lobby" />
+    <transition event="session_create_failed" next_state="PressStartScreen" />
+  </CreateSession>      
+
+  <JoinSession>
+    <transition event="joined_session" next_state="FrontEnd/Multiplayer/Lobby" />
+    <transition event="joine_session_failed" next_state="PressStartScreen" />
+  </JoinSession>
+ 
+  <FrontEnd>
+    <asset id="ui_front_end" />
+    <transition event="signed_out" next_state="PressStartScreen"/>
+    <transition event="signed_in" next_state="PressStartScreen"/>
+    <transition event="invite_accepted" next_state="JoinInvite"/>
+    
+    <MainMenu>
+      <asset id="ui_main_menu"/>
+      <transition event="go_to_multiplayer_menu" next_state="MultiplayerMenu"/>
+      <transition event="go_to_campaign_menu" next_state="CampaignMenu"/>
+      <transition event="go_to_options_menu" next_state="OptionsMenu"/>
+    </MainMenu>
+
+    <CampaignMenu>
+      <transition event="start_race" next_state="//Flow/Race/Loading" />
+      <transition event="go_to_main_menu" next_state="MainMenu" />
+    </CampaignMenu>
+
+    <OptionsMenu>
+      <transition event="go_to_main_menu" next_state="MainMenu" />
+    </OptionsMenu>
+
+    <MultiplayerMenu>
+      <asset id="ui_multiplayer_menu"/>
+      <transition event="go_to_main_menu" next_state="MainMenu" />
+      <transition event="network_cable_disconnected" next_state="MainMenu"/>
+      <transition event="create_custom_match" next_state="Multiplayer/CreateSession"/>
+      <transition event="find_custom_match" next_state="Multiplayer/FindSession"/>
+      <transition event="find_quickmatch" next_state="Multiplayer/FindSession"/>
+      <transition event="find_ranked_match" next_state="Multiplayer/FindSession"/>
+    </MultiplayerMenu>
+
+    <Multiplayer>
+      <transition event="network_cable_disconnected" next_state="MainMenu"/>
+      <transition event="network_services_disconnected" next_state="MainMenu"/>
+
+      <FindSession>
+        <transition event="session_found" next_state="JoinSession" />
+        <transition event="session_search_cancelled" next_state="../MultiplayerMenu" />
+      </FindSession>
+
+      <CreateSession>
+        <transition event="session_created" next_state="Lobby/WaitForPlayers" />
+        <transition event="session_create_failed" next_state="../MultiplayerMenu" />
+      </CreateSession>
+
+      <JoinSession>
+        <transition event="session_joined" next_state="Lobby" />
+        <transition event="session_join_failed" next_state="../MultiplayerMenu" />
+      </JoinSession>
+
+      <Lobby>
+        <asset id="ui_multiplayer_lobby"/>
+        <transition event="session_closed" next_state="../MultiplayerMenu" />
+        
+        <WaitForPlayers>
+          <transition event="all_players_ready" next_state="//Flow/Race/Loading" />
+        </WaitForPlayers>
+      
+      </Lobby>
+    </Multiplayer>
+  </FrontEnd>
+  
+  <Race>
+    <Loading>
+      <asset id="ui_loading_screen"/>
+      <asset id="track_data"/>
+      <asset id="track_weather"/>
+      <asset id="track_props" />
+      <asset id="pit_lane" />
+      <asset id="pit_garages" />
+      <asset id="pit_crews" />
+      <asset id="vehicles" />
+      <asset id="race_rules" />
+      <transition event="loading_completed" next_state="WaitForTrackDataSync" />
+    </Loading>
+
+    <WaitForTrackDataSync>
+      <transition event="ready" next_state="TrackEnvironment/IntroCutscene"/>
+      <transition event="interrupt_event" next_state="Unloading"/>
+    </WaitForTrackDataSync>
+    
+    <TrackEnvironment>
+      <transition event="interrupt_event" next_state="Unloading"/>
+      <transition event="quit_race" next_state="Unloading" />
+
+      <IntroCutscene>
+        <asset id="track_intro_cutscene"/>
+        <transition event="video_completed" next_state="WaitForGridPlayers"/>
+      </IntroCutscene>
+
+      <WaitForGridPlayers id="pre_grid_countdown">
+        <transition event="ready" next_state="GridCountdown" />
+      </WaitForGridPlayers>
+  
+      <GridCountdown>
+        <asset id="ui_grid_countdown"/>
+        <transition event="countdown_completed" next_state="Racing" />
+      </GridCountdown>
+
+      <Racing>
+        <asset id="ui_race_hud" />
+        <transition event="race_finished" next_state="EndRaceCutscene" />
+      </Racing>
+
+      <EndRaceCutscene>
+        <transition event="cutscene_finished" next_state="RaceResults" />
+      </EndRaceCutscene>
+
+      <RaceResults>
+        <transition event="close_race_results" next_state="NextRaceVote" />
+      </RaceResults>
+
+      <NextRaceVote>
+        <transition event="all_players_voted" next_state="../Unloading" />
+      </NextRaceVote>
+
+    </TrackEnvironment>
+
+    <Unloading>
+      <asset id="ui_loading_screen"/>
+      <transition event="unloading_completed" next_state="PostUnloading" />
+    </Unloading>
+
+    <PostUnloading>
+      <transition event="next_track" next_state="Loading" />
+      <transition event="return_to_lobby" next_state="../FrontEnd/Multiplayer/Lobby/WaitForPlayers" />
+      <transition event="return_to_main_menu" next_state="//Flow/FrontEnd/MainMenu" />
+      <transition event="return_to_press_start_screen" next_state="//Flow/PressStartScreen" />
+    </PostUnloading>
+  </Race>
+</Flow>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{BFD0B4BD-A857-41F4-BEE3-9835D83F1FDB}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>state_machine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)\..\source;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)\source;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)..\Source;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);TIXML_USE_STL</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);TIXML_USE_STL</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>TIXML_USE_STL</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>TIXML_USE_STL</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\flow\bitfield.cpp" />
+    <ClCompile Include="..\source\flow\debug.cpp" />
+    <ClCompile Include="..\source\flow\state_machine.cpp" />
+    <ClCompile Include="..\source\flow\state_machine_xml_loader.cpp" />
+    <ClCompile Include="..\source\main_state_machine.cpp" />
+    <ClCompile Include="..\source\test\states\state_factory_table.cpp" />
+    <ClCompile Include="..\source\test\states\state_flow.cpp" />
+    <ClCompile Include="..\source\test\states\state_flow_pressstartscreen.cpp" />
+    <ClCompile Include="..\source\test\test_asset.cpp" />
+    <ClCompile Include="..\source\test\test_factory.cpp" />
+    <ClCompile Include="..\source\test\test_game.cpp" />
+    <ClCompile Include="..\source\test\test_generator.cpp" />
+    <ClCompile Include="..\source\test\test_interrupts.cpp" />
+    <ClCompile Include="..\source\test\test_simulated_event.cpp" />
+    <ClCompile Include="..\source\test\test_simulated_invites.cpp" />
+    <ClCompile Include="..\source\test\test_simulated_network.cpp" />
+    <ClCompile Include="..\source\test\test_simulated_online_services.cpp" />
+    <ClCompile Include="..\source\test\test_simulated_session.cpp" />
+    <ClCompile Include="..\source\test\test_state_base.cpp" />
+    <ClCompile Include="..\source\test\test_utils.cpp" />
+    <ClCompile Include="..\source\tinyXML\tinystr.cpp" />
+    <ClCompile Include="..\source\tinyXML\tinyxml.cpp" />
+    <ClCompile Include="..\source\tinyXML\tinyxmlerror.cpp" />
+    <ClCompile Include="..\source\tinyXML\tinyxmlparser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\flow\asset.h" />
+    <ClInclude Include="..\source\flow\bitfield.h" />
+    <ClInclude Include="..\source\flow\debug.h" />
+    <ClInclude Include="..\source\flow\schema.h" />
+    <ClInclude Include="..\source\flow\state.h" />
+    <ClInclude Include="..\source\flow\state_machine.h" />
+    <ClInclude Include="..\source\flow\state_machine_factory.h" />
+    <ClInclude Include="..\source\flow\state_machine_xml_loader.h" />
+    <ClInclude Include="..\source\flow\transition.h" />
+    <ClInclude Include="..\source\test\states\state_flow.h" />
+    <ClInclude Include="..\source\test\states\state_flow_pressstartscreen.h" />
+    <ClInclude Include="..\source\test\test_asset.h" />
+    <ClInclude Include="..\source\test\test_factory.h" />
+    <ClInclude Include="..\source\test\test_game.h" />
+    <ClInclude Include="..\source\test\test_generator.h" />
+    <ClInclude Include="..\source\test\test_interrupts.h" />
+    <ClInclude Include="..\source\test\test_schema.h" />
+    <ClInclude Include="..\source\test\test_simulated_event.h" />
+    <ClInclude Include="..\source\test\test_simulated_invites.h" />
+    <ClInclude Include="..\source\test\test_simulated_network.h" />
+    <ClInclude Include="..\source\test\test_simulated_online_services.h" />
+    <ClInclude Include="..\source\test\test_simulated_session.h" />
+    <ClInclude Include="..\source\test\test_state_base.h" />
+    <ClInclude Include="..\source\test\test_utils.h" />
+    <ClInclude Include="..\source\tinyXML\tinystr.h" />
+    <ClInclude Include="..\source\tinyXML\tinyxml.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\templates\state.cpp.template" />
+    <None Include="..\templates\state.h.template" />
+    <None Include="..\templates\state_factory_table.cpp.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\xmls\state_machine.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

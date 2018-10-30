@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\tinyXML">
+      <UniqueIdentifier>{aa560147-6df0-4cae-bf3c-47e5e344ea2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test">
+      <UniqueIdentifier>{8660e4e2-e10d-4257-b735-76a91b494e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\flow">
+      <UniqueIdentifier>{cfdb1a82-bfdc-4554-9638-3e3fa731b916}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\test\states">
+      <UniqueIdentifier>{3858a0cd-d265-4a49-8747-76b41f7be51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\templates">
+      <UniqueIdentifier>{e0f02077-ab93-471e-9f56-5d132abf0b7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xmls">
+      <UniqueIdentifier>{96d0cd86-c6b0-4b87-b229-6a355aa34791}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\flow\debug.cpp">
+      <Filter>Source Files\flow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\flow\state_machine.cpp">
+      <Filter>Source Files\flow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\flow\state_machine_xml_loader.cpp">
+      <Filter>Source Files\flow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_factory_table.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_pressstartscreen.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_asset.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_factory.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_game.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_generator.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_simulated_event.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_simulated_invites.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_simulated_network.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_simulated_online_services.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_simulated_session.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_state_base.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_utils.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyXML\tinystr.cpp">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyXML\tinyxml.cpp">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyXML\tinyxmlerror.cpp">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\tinyXML\tinyxmlparser.cpp">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\main_state_machine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\test_interrupts.cpp">
+      <Filter>Source Files\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\flow\bitfield.cpp">
+      <Filter>Source Files\flow</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\flow\asset.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\debug.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\schema.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\state.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\state_machine.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\state_machine_factory.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\state_machine_xml_loader.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\transition.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_pressstartscreen.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_asset.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_factory.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_game.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_generator.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_simulated_event.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_simulated_invites.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_simulated_network.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_simulated_online_services.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_simulated_session.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_state_base.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_utils.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\tinyXML\tinystr.h">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\tinyXML\tinyxml.h">
+      <Filter>Source Files\tinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_interrupts.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\test_schema.h">
+      <Filter>Source Files\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\flow\bitfield.h">
+      <Filter>Source Files\flow</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\templates\state.cpp.template">
+      <Filter>Source Files\templates</Filter>
+    </None>
+    <None Include="..\templates\state.h.template">
+      <Filter>Source Files\templates</Filter>
+    </None>
+    <None Include="..\templates\state_factory_table.cpp.template">
+      <Filter>Source Files\templates</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\xmls\state_machine.xml">
+      <Filter>Source Files\xmls</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>

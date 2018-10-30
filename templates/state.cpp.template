@@ -1,0 +1,34 @@
+
+// [#template.time_and_date] : generated from '[#template.xml_input_file]'.
+
+#include "test/test_game.h"
+
+#include "test/states/[#template.state.filename].h"
+
+namespace test
+{
+    namespace states
+    {
+        [#template.state.type]::[#template.state.type]( const flow::schema::State& schema, test::Game& game )
+            : test::StateBase( schema, game )
+        {}
+        
+        [#template.state.type]::~[#template.state.type]()
+        {}
+
+        void [#template.state.type]::Enter()
+        {
+             debug::logWarning("[TEST] [TODO] IMPLEMENT ME ('%s').", "[#template.state.type]");
+        }
+
+        std::string [#template.state.type]::Update()
+        {
+            return std::string();
+        }
+
+        void [#template.state.type]::Exit()
+        {
+
+        }
+    }
+}
