@@ -78,6 +78,12 @@ namespace debug
     extern void logSanityCheck(const char* format, ...);
 }
 
-#define ASSERT_SANITY(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::SanityCheck, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
-#define ASSERT_FATAL(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::Fatal, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
-#define ASSERT_WARNING(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::Warning, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
+#if defined(_DEBUG)
+    #define ASSERT_SANITY(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::SanityCheck, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
+    #define ASSERT_FATAL(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::Fatal, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
+    #define ASSERT_WARNING(CONDITION, FORMAT, ...) debug::assertArgs(CONDITION, #CONDITION, debug::LogLevel::Warning, __FILE__, __LINE__, FORMAT, __VA_ARGS__)
+#else
+    #define ASSERT_SANITY(CONDITION, FORMAT, ...)
+    #define ASSERT_FATAL(CONDITION, FORMAT, ...)
+    #define ASSERT_WARNING(CONDITION, FORMAT, ...)
+#endif

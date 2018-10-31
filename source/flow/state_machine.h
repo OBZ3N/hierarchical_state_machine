@@ -47,10 +47,9 @@ namespace flow
         void updateTransition();
 
         // utils.
-        void evaluateTransitionOperation( std::string& state, bool& push_state, bool& pop_state ) const;
-        void evaluateTransitionOperationBitfield( std::string& state, bool& push_state, bool& pop_state ) const;
-        std::string evaluateCommonState(const std::string& state_a, const std::string& state_b) const;
-        
+        void evaluateTransitionOperation( Bitfield& state_bitname, bool& push_state, bool& pop_state ) const;
+        void evaluateTransitionOperation( std::string& state_fullname, bool& push_state, bool& pop_state ) const;
+
         // debugging (extra string formating context).
         void logDebug( debug::LogLevel level, const char* format, ... ) const;
 
@@ -66,13 +65,21 @@ namespace flow
         std::string             m_statusString;     // status of the state machine (debugging).
 
         // lookup table utils.
+        // the state bitname is a bitfield representation, of the location of the state within the hierarchy. 
+        // This is unique to each state, and can be use to accelerate transition evaluations (what state to push, pop, ect... to reach the desired state).
         std::vector<schema::State*> calculateSubStates( const schema::State* parent );
         void calculateLookupKey( const Bitfield& bitfield, const schema::State* state );
         bool calculateLookupTable();
 
-        // accelerate the state search.
-        std::unordered_map<Bitfield, std::string> m_state_lookup;
-        std::unordered_map<std::string, Bitfield> m_state_reverse_lookup;
-    };
+        // lookup tables between state bitnames, and state fullnames.
+        std::unordered_map<Bitfield, std::string> m_state_fullname_lookup;
+        std::unordered_map<std::string, Bitfield> m_state_bitname_lookup;
 
+#if defined(_DEBUG)
+        // sanity checks. 
+        // Use regular strings to evaluate if we need to push another state, or pop the current state off the stack to reach the desired state.
+        void evaluateTransitionOperationWithFullNames(std::string& state_fullname, bool& push_state, bool& pop_state) const;
+        std::string evaluateCommonState(const std::string& state_a, const std::string& state_b) const;
+#endif
+    };
 }

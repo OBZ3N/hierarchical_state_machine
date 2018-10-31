@@ -13,13 +13,13 @@
 
 namespace flow
 {
-    StateMachine::StateMachine( )
-        : m_factory( nullptr )
+    StateMachine::StateMachine()
+        : m_factory(nullptr)
     {
         m_statusString = "NULL";
         m_transition = nullptr;
     }
-    
+
     StateMachine::~StateMachine()
     {
         shutdown();
@@ -30,33 +30,33 @@ namespace flow
         m_factory = factory;
     }
 
-    void StateMachine::logDebug( debug::LogLevel level, const char* format, ... ) const
+    void StateMachine::logDebug(debug::LogLevel level, const char* format, ...) const
     {
         va_list args;
-        va_start( args, format );
-        char buffer[ 1024 ];
-        vsnprintf( buffer, sizeof( buffer ), format, args );
-        va_end( args );
+        va_start(args, format);
+        char buffer[1024];
+        vsnprintf(buffer, sizeof(buffer), format, args);
+        va_end(args);
 
         std::ostringstream stream;
 
-        if ( !isLoaded() )
+        if (!isLoaded())
         {
-            stream << "[FSM] " << std::left << std::setfill( ' ' ) << std::setw( 16 ) << m_statusString << " " << buffer;
+            stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " " << buffer;
         }
         else
         {
-            if ( m_statesToUpdate.empty() )
+            if (m_statesToUpdate.empty())
             {
-                stream << "[FSM] " << std::left << std::setfill( ' ' ) << std::setw( 16 ) << m_statusString << " "  << buffer;
+                stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " " << buffer;
             }
             else
             {
-                stream << "[FSM] " << std::left << std::setfill( ' ' ) << std::setw( 16 ) << m_statusString << " <" << m_statesToUpdate.front()->getSchema().m_fullname << "> " << buffer;
+                stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " <" << m_statesToUpdate.front()->getSchema().m_fullname << "> " << buffer;
             }
         }
 
-        debug::logDebug( level, stream.str().c_str() );
+        debug::logDebug(level, stream.str().c_str());
     }
 
     void StateMachine::shutdown()
@@ -65,13 +65,13 @@ namespace flow
 
         m_schema = schema::StateMachine();
 
-        for ( auto asset : m_assetsToLoad )
+        for (auto asset : m_assetsToLoad)
             delete asset;
 
-        for ( auto asset : m_assetsToUnload )
+        for (auto asset : m_assetsToUnload)
             delete asset;
 
-        for ( auto state : m_statesToUpdate )
+        for (auto state : m_statesToUpdate)
             delete state;
 
         delete m_transition;
@@ -83,20 +83,20 @@ namespace flow
 
         m_statusString = "SHUTDOWN";
 
-        logDebug( debug::LogLevel::Trace, "Shutdown." );
+        logDebug(debug::LogLevel::Trace, "Shutdown.");
     }
 
-    bool StateMachine::load( const std::string& xml_filename )
+    bool StateMachine::load(const std::string& xml_filename)
     {
-        logDebug( debug::LogLevel::Info, "loading '%s'...", xml_filename .c_str() );
+        logDebug(debug::LogLevel::Info, "loading '%s'...", xml_filename.c_str());
 
         m_statusString = "LOADING";
 
         StateMachineXmlLoader loader;
 
-        if ( ! loader.load( xml_filename ) )
+        if (!loader.load(xml_filename))
         {
-            logDebug( debug::LogLevel::Error, "schema '%s' failed to load.", xml_filename.c_str() );
+            logDebug(debug::LogLevel::Error, "schema '%s' failed to load.", xml_filename.c_str());
 
             m_statusString = "LOADING FAILED";
 
@@ -105,9 +105,9 @@ namespace flow
 
         m_schema = loader.getSchema();
 
-        if ( !calculateLookupTable() )
+        if (!calculateLookupTable())
         {
-            logDebug( debug::LogLevel::Error, "failed to build lookup table." );
+            logDebug(debug::LogLevel::Error, "failed to build lookup table.");
 
             m_statusString = "LOADING FAILED";
 
@@ -116,7 +116,7 @@ namespace flow
 
         m_statusString = "LOADED";
 
-        logDebug( debug::LogLevel::Info, "schema '%s' loaded.", xml_filename.c_str() );
+        logDebug(debug::LogLevel::Info, "schema '%s' loaded.", xml_filename.c_str());
 
         return true;
     }
@@ -146,7 +146,7 @@ namespace flow
             logDebug(debug::LogLevel::Error, "Factory is nullptr.");
             return;
         }
-        
+
         if (isStarted())
         {
             // need to exit first before restarting.
@@ -165,7 +165,7 @@ namespace flow
     void StateMachine::stop()
     {
         // already stopped.
-        if ( isStopped() )
+        if (isStopped())
             return;
 
         m_statusString = "STOPPING";
@@ -192,15 +192,15 @@ namespace flow
     bool StateMachine::isStopped() const
     {
         // transitioning. Not finished.
-        if ( m_transition != nullptr )
+        if (m_transition != nullptr)
             return false;
 
         // still states being updated.
-        if ( !m_statesToUpdate.empty() )
+        if (!m_statesToUpdate.empty())
             return false;
 
         // assets still being loaded.
-        if ( !m_assetsToLoad.empty() )
+        if (!m_assetsToLoad.empty())
             return false;
 
         // assets still being unloaded.
@@ -239,14 +239,14 @@ namespace flow
         }
 
         // no transitions being processed, update state stacks to find the next transition.
-        if ( m_transition == nullptr )
+        if (m_transition == nullptr)
         {
             m_statusString = "UPDATING_STATES";
             updateStatesStack();
         }
-        
+
         // transition fired. Pop and push states to reach the targeted state.
-        if ( m_transition != nullptr )
+        if (m_transition != nullptr)
         {
             updateTransition();
         }
@@ -255,19 +255,19 @@ namespace flow
     void StateMachine::updateStatesStack()
     {
         // start updating states, from the bottom up.
-        for ( auto it = m_statesToUpdate.rbegin(); it != m_statesToUpdate.rend(); ++it )
+        for (auto it = m_statesToUpdate.rbegin(); it != m_statesToUpdate.rend(); ++it)
         {
             auto state = *it;
 
             std::string event = state->update();
 
             // state fired a transition event.
-            if ( !event.empty() )
+            if (!event.empty())
             {
                 // find the transition definition.
-                for ( auto transition_schema : state->getSchema().m_transitions )
+                for (auto transition_schema : state->getSchema().m_transitions)
                 {
-                    if ( transition_schema.m_event_name == event )
+                    if (transition_schema.m_event_name == event)
                     {
                         if (m_factory == nullptr)
                         {
@@ -283,13 +283,13 @@ namespace flow
                 }
 
                 // transition invalid. The event probably doesn't match a transition in the schema data.
-                if ( m_transition == nullptr )
+                if (m_transition == nullptr)
                 {
-                    logDebug( debug::LogLevel::Error, "Transition not found for event '%s'.", event.c_str() );
+                    logDebug(debug::LogLevel::Error, "Transition not found for event '%s'.", event.c_str());
                 }
                 else
                 {
-                    logDebug( debug::LogLevel::Info, "transition '%s' ----> <%s>.", m_transition->getEvent().c_str(), m_transition->getNextState().c_str() );
+                    logDebug(debug::LogLevel::Info, "transition '%s' ----> <%s>.", m_transition->getEvent().c_str(), m_transition->getNextState().c_str());
 
                     // stop updating the state stack, we're going some place.
                     break;
@@ -298,20 +298,42 @@ namespace flow
         }
     }
 
+
     void StateMachine::updateTransition()
     {
         // see what needs to be done to reach the targeted transition.
         std::string state_name;
         bool push_state;
         bool pop_state;
-        evaluateTransitionOperationBitfield(state_name, push_state, pop_state);
+        evaluateTransitionOperation(state_name, push_state, pop_state);
+
+        //-------------------------------------------------------------
+        // SANITY CHECK OUR TRANSITION OPERATION.
+        //-------------------------------------------------------------
+#if defined(_DEBUG)
+        // use state fullnames to evaluate the transition operation and compare with our previous results.
+        std::string sanity_check_state_name;
+        bool sanity_check_push_state;
+        bool sanity_check_pop_state;
+        evaluateTransitionOperationWithFullNames(sanity_check_state_name, sanity_check_push_state, sanity_check_pop_state);
+
+        // check if both evaluations match.
+        ASSERT_SANITY(  ( sanity_check_state_name == state_name ) &&
+                        ( sanity_check_push_state == push_state ) &&
+                        ( sanity_check_pop_state == pop_state ),
+            "EvaluateTransition() : bitfield evaluation('%s', %s) does not match string evaluation('%s', %s).",
+            state_name.c_str(),
+            push_state && pop_state ? "push&pop???" : push_state ? "push" : pop_state ? "pop" : "---",
+            sanity_check_state_name.c_str(),
+            sanity_check_push_state && sanity_check_pop_state ? "push&pop???" : sanity_check_push_state ? "push" : sanity_check_pop_state ? "pop" : "---" );
+#endif
 
         // we need to pop states from the stack so we can reach to the transition's next state.
         if (pop_state)
         {
             // first state to pop.
             State* state = m_statesToUpdate.front();
-            
+
             // sanity check.
             if (state->getFullName() != state_name)
             {
@@ -354,7 +376,7 @@ namespace flow
         if (push_state)
         {
             auto it = m_schema.m_states.find(state_name);
-            
+
             if (it == m_schema.m_states.end())
             {
                 logDebug(debug::LogLevel::Error, "couldn't find schema for state '%s'.", state_name);
@@ -398,7 +420,7 @@ namespace flow
         }
 
         // nothing to do, clear transition.
-        if ( !pop_state && !push_state )
+        if (!pop_state && !push_state)
         {
             // Clear everything, we're done.
             delete m_transition;
@@ -406,149 +428,31 @@ namespace flow
         }
     }
 
-    std::string StateMachine::evaluateCommonState(const std::string& state_a, const std::string& state_b) const
+    void StateMachine::evaluateTransitionOperation(std::string& state_fullname, bool& push_state, bool& pop_state) const
     {
-        std::string common_state;
+        // use state bitnames for evaluation.
+        Bitfield state_bitname;
+        evaluateTransitionOperation(state_bitname, push_state, pop_state);
 
-        size_t len = std::min(state_a.length(), state_b.length());
-
-        for (size_t i = 0; i < len; ++i)
+        // translate bitname into fullname (if we need to do anything).
+        if (push_state || pop_state)
         {
-            if (state_a[i] == state_b[i])
+            // find state name matching the bitname.
+            std::string state_name;
+            auto it = m_state_fullname_lookup.find(state_bitname);
+            if (it == m_state_fullname_lookup.end())
             {
-                common_state.push_back(state_a[i]);
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        // root identifier.
-        if (common_state == "\\\\")
-        {
-            // just set to zero.
-            common_state.clear();
-        }
-
-        // remove trailing '\'.
-        if (!common_state.empty() && common_state.back() == '\\')
-        {
-            common_state.pop_back();
-        }
-        return common_state;
-    }
-
-    void StateMachine::evaluateTransitionOperationBitfield( std::string& state, bool& push_state, bool& pop_state ) const
-    {
-        // default, do nothing.
-        push_state = false;
-        pop_state = false;
-
-        // no transition to process.
-        if ( m_transition == nullptr )
-            return;
-
-        // reached the bottom of the state machine, and that's where we want to be.
-        if ( m_statesToUpdate.empty() && m_transition->getNextState().empty() )
-        {
-            // check if we're booting or re-booting the state machine.
-            if ( m_transition->getEvent() == "start_state_machine" ||
-                m_transition->getEvent() == "restart_state_machine" )
-            {
-                // the state we're trying to reach is now the startup state.
-                state = m_schema.m_transition_start_state_machine.m_next_state;
-                push_state = true;
+                logDebug(debug::LogLevel::SanityCheck, "failed to find state matching the bitfield.");
+                push_state = false;
+                pop_state = false;
                 return;
             }
-            // event is 'stop_state_machine', or some unknown event.
-            else
-            {
-                // stopping the state machine should be fired by the event 'stop_state_machine'.
-                if ( m_transition->getEvent() != "stop_state_machine" )
-                {
-                    logDebug( debug::LogLevel::Error, "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str() );
-                }
-                // done. No push or pop of states required.
-                return;
-            }
-        }
-
-        // find state 
-        auto it = m_state_reverse_lookup.find( m_transition->getNextState() );
-        if ( it == m_state_reverse_lookup.end() )
-        {
-            logDebug( debug::LogLevel::SanityCheck, "could not find lookup bitfield for state '%s'." , m_transition->getNextState().c_str() );
-            return;
-        }
-
-        if ( m_statesToUpdate.empty() )
-        {
-            // the state we're trying to reach is now the startup state.
-            state = m_schema.m_transition_start_state_machine.m_next_state;
-            push_state = true;
-            return;
-        }
-        
-        auto jt = m_state_reverse_lookup.find( m_statesToUpdate.front()->getSchema().m_fullname );
-        if ( jt == m_state_reverse_lookup.end() )
-        {
-            logDebug( debug::LogLevel::SanityCheck, "could not find lookup bitfield for state '%s'.", m_statesToUpdate.front()->getSchema().m_fullname.c_str() );
-            return;
-        }
-
-        // find bitfileds that identify the states.
-        const Bitfield& state_to_reach = it->second;
-        const Bitfield& state_current = jt->second;
-
-        if ( state_to_reach == state_current )
-        {
-            // restart the state.
-            state = m_transition->getNextState();
-            pop_state = true;
-            return;
-        }
-
-        // find the bitfield that identifies the state that is common to the target and current states.
-        Bitfield common_bitfield = state_to_reach & state_current;
-        
-        // we've reached the common state. start loading states.
-        if ( common_bitfield == state_current )
-        {
-            for ( size_t i = state_current.getNumBits(); i < state_to_reach.getNumBits(); ++i )
-            {
-                // stop at first bitfield with a bit set to true.
-                // that will be the first sub-state we need to enter.
-                if ( state_current.getBit( i ) )
-                {
-                    // generate the sub-state bitfield we need to enter.
-                    common_bitfield.setBit( i, true );
-
-                    // find the state name corresponding to the bitfield.
-                    auto kt = m_state_lookup.find( common_bitfield );
-                    if ( kt == m_state_lookup.end() )
-                    {
-                        logDebug( debug::LogLevel::SanityCheck, "could not find lookup state name for bitfield." );
-                        return;
-                    }
-
-                    // restart the state.
-                    state = kt->second;
-                    push_state = true;
-                    return;
-                }
-            }
-        }
-        // we're not at the common state. Start unloading states to reach the common state.
-        else
-        {
-            // start from the top, work your way down.
-            state = m_statesToUpdate.front()->getSchema().m_fullname;
-            pop_state = true;
+            state_name = it->second;
         }
     }
 
-    void StateMachine::evaluateTransitionOperation(std::string& state, bool& push_state, bool& pop_state) const
+    // find what operation needs to be performed for the transition.
+    void StateMachine::evaluateTransitionOperation(Bitfield& state_bitname, bool& push_state, bool& pop_state) const
     {
         // default, do nothing.
         push_state = false;
@@ -558,88 +462,93 @@ namespace flow
         if (m_transition == nullptr)
             return;
 
-        // where the transition is telling us to go to.
-        std::string state_to_reach = m_transition->getNextState();
-
-        // reached the bottom of the state machine, and that's where we want to be.
-        if (m_statesToUpdate.empty() && state_to_reach.empty())
+        // reached the bottom of the state machine, and transition tries to reach the bottom.
+        if (m_statesToUpdate.empty() && m_transition->getNextState().empty())
         {
             // check if we're booting or re-booting the state machine.
             if (m_transition->getEvent() == "start_state_machine" ||
-                m_transition->getEvent() == "restart_state_machine" )
+                m_transition->getEvent() == "restart_state_machine")
             {
-                // the state we're trying to reach is now the startup state.
-                state_to_reach = m_schema.m_transition_start_state_machine.m_next_state;
-            }
-            // event is 'stop_state_machine', or some unknown event.
-            else
-            {
-                // stopping the state machine should be fired by the event 'stop_state_machine'.
-                if (m_transition->getEvent() != "stop_state_machine")
-                {
-                    logDebug(debug::LogLevel::Error, "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str());
-                }
-                // done. No push or pop of states required.
+                // the state we're trying to reach is the root state.
+                state_bitname.setBit(0, true);
+                push_state = true;
                 return;
             }
-        }
 
-        // the name of the state at the top of the update stack. 
-        // '' if empty.
-        std::string state_current;
-
-        if (!m_statesToUpdate.empty())
-        {
-            state_current = m_statesToUpdate.front()->getFullName();
-        }
-
-        // transition points to the current state.
-        // So we want to restart the current state.
-        if (state_current == state_to_reach)
-        {
-            // start from the top, work your way down.
-            state = state_current;
-            pop_state = true;
+            // stopping the state machine should be fired by the event 'stop_state_machine'.
+            ASSERT_SANITY( m_transition->getEvent() == "stop_state_machine" , "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str());
             return;
         }
 
-        // find the branch state that is common to both the transition target and the current top-most state.
-        std::string state_common = evaluateCommonState(state_current, state_to_reach);
-
-        // we've reached the common state. start loading states.
-        if (state_common == state_current)
+        // find state bitname we're trying to reach.
+        auto it = m_state_bitname_lookup.find(m_transition->getNextState());
+        if (it == m_state_bitname_lookup.end())
         {
-            // the list of states that we'll eventually push onto the stack.
-            std::string states_to_push = state_to_reach.substr(state_common.length(), state_to_reach.length() - state_common.length());
+            // do nothing. maybe an error in the xml definition, so we'll be stuck here, but that's ok.
+            logDebug(debug::LogLevel::Error, "could not find lookup bitfield for state '%s'.", m_transition->getNextState().c_str());
+            return;
+        }
 
-            if ( states_to_push.find( "\\\\" ) == 0)
-            {
-                states_to_push = states_to_push.substr( 2, states_to_push.length() - 2 );
-            }
-
-
-            if ( states_to_push.find( "\\" ) == 0 )
-            {
-                states_to_push = states_to_push.substr(1, states_to_push .length()-1);
-            }
-
-            // find the first state to push.
-            size_t pos = states_to_push.find_first_of('\\');
-
-            state = (pos != std::string::npos) ? state_common + std::string("\\") + states_to_push.substr(0, pos) : state_to_reach;
-            
+        // state stack is empty. Just go to root state.
+        if (m_statesToUpdate.empty())
+        {
+            // the state we're trying to reach is now the startup state.
+            state_bitname.setBit(0, true);
             push_state = true;
             return;
         }
-        // we're not at the common state. Start unloading statesto reach the common state.
+
+        // find state bitname we're currently at.
+        auto jt = m_state_bitname_lookup.find(m_statesToUpdate.front()->getSchema().m_fullname);
+        if (jt == m_state_bitname_lookup.end())
+        {
+            //. this is not ok. SHould not happen.
+            logDebug(debug::LogLevel::SanityCheck, "could not find lookup bitfield for state '%s'.", m_statesToUpdate.front()->getSchema().m_fullname.c_str());
+            return;
+        }
+
+        // find bitfields that identify the states we're trying to reach, and the state we're currently at.
+        const Bitfield& state_to_reach = it->second;
+        const Bitfield& state_current = jt->second;
+
+        // both match each other. It's a restart request.
+        if (state_to_reach == state_current)
+        {
+            // restart the state.
+            state_bitname = state_current;
+            pop_state = true;
+            return;
+        }
+
+        // find the bitfield that identifies the state that is common to the target and current states.
+        Bitfield common_bitfield = state_to_reach & state_current;
+
+        // we've reached the common state. start loading states.
+        if (common_bitfield == state_current)
+        {
+            for (size_t i = state_current.getNumBits(); i < state_to_reach.getNumBits(); ++i)
+            {
+                // stop at first bitfield with a bit set to true.
+                // that will be the first sub-state we need to enter.
+                if (state_current.getBit(i))
+                {
+                    // generate the sub-state bitfield we need to enter.
+                    state_bitname = common_bitfield;
+                    state_bitname.setBit(i, true);
+                    push_state = true;
+                    return;
+                }
+            }
+        }
+        // we're not at the common state. Start unloading states to reach the common state.
         else
         {
             // start from the top, work your way down.
-            state = state_current;
+            state_bitname = state_current;
             pop_state = true;
         }
     }
-    
+
     // load all assets before entering the state.
     void StateMachine::updateAssetsToLoad()
     {
@@ -650,7 +559,7 @@ namespace flow
         while (asset != nullptr)
         {
             // sanity check.
-            ASSERT_SANITY(!m_statesToUpdate.empty(), 
+            ASSERT_SANITY(!m_statesToUpdate.empty(),
                 "asset '%s' for state '%s'. No state are being updated.",
                 asset->getSchema().m_asset_name.c_str(),
                 asset->getSchema().m_state_name.c_str());
@@ -721,13 +630,13 @@ namespace flow
 
         Asset* asset = first_asset;
 
-        while ( asset != nullptr )
+        while (asset != nullptr)
         {
             bool asset_unload_started = asset->isUnloading() ? true : asset->unload();
 
             bool asset_unload_finished = asset_unload_started && asset->isUnloaded();
 
-            if ( !asset_unload_started || asset_unload_finished )
+            if (!asset_unload_started || asset_unload_finished)
             {
                 logDebug(debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_unload_started ? "unloaded" : "unload skipped");
 
@@ -743,71 +652,71 @@ namespace flow
         }
 
         // unloading finished.
-        if ( asset == nullptr && first_asset != nullptr )
+        if (asset == nullptr && first_asset != nullptr)
         {
             // we had assets to unload. Tell when it's finished.
             logDebug(debug::LogLevel::Trace, "all assets unloaded.");
         }
     }
 
-    std::vector<schema::State*> StateMachine::calculateSubStates( const schema::State* parent )
+    std::vector<schema::State*> StateMachine::calculateSubStates(const schema::State* parent)
     {
         std::vector<schema::State*> sub_states;
 
         std::string parent_name = parent->m_fullname;
 
-        for ( auto& state_schema : m_schema.m_states )
+        for (auto& state_schema : m_schema.m_states)
         {
             std::string state_name = state_schema.second.m_fullname;
 
-            size_t pos = state_name.find( parent_name );
+            size_t pos = state_name.find(parent_name);
 
-            if ( pos != 0 )
+            if (pos != 0)
                 continue;
 
-            std::string sub_state_name = state_name.substr( parent_name.size() );
+            std::string sub_state_name = state_name.substr(parent_name.size());
 
-            pos = sub_state_name.rfind( "\\" );
+            pos = sub_state_name.rfind("\\");
 
-            if ( pos != 0 )
+            if (pos != 0)
                 continue;
 
-            sub_states.push_back( &state_schema.second );
+            sub_states.push_back(&state_schema.second);
         }
 
         return sub_states;
     }
 
-    void StateMachine::calculateLookupKey( const Bitfield& bitfield, const schema::State* state )
+    void StateMachine::calculateLookupKey(const Bitfield& bitfield, const schema::State* state)
     {
         // find sub-states.
-        std::vector<schema::State*> subStates = calculateSubStates( state );
+        std::vector<schema::State*> subStates = calculateSubStates(state);
 
         // calculate sub-states bitfields.
         std::vector<Bitfield> subStateBitfields;
 
-        for ( size_t i = 0; i < subStates.size(); ++i )
+        for (size_t i = 0; i < subStates.size(); ++i)
         {
             Bitfield subStateBitfield = bitfield;
 
-            for ( size_t j = 0; j < subStates.size(); ++j )
+            for (size_t j = 0; j < subStates.size(); ++j)
             {
-                bool value = ( j == i ) ? true : false;
+                bool value = (j == i) ? true : false;
 
-                subStateBitfield.pushBit( value );
+                subStateBitfield.pushBit(value);
             }
 
-            subStateBitfields.push_back( subStateBitfield );
+            subStateBitfields.push_back(subStateBitfield);
 
             // store lookup entries.
-            m_state_lookup[ subStateBitfield ] = subStates[ i ]->m_fullname;
-            m_state_reverse_lookup[ subStates[ i ]->m_fullname ] = subStateBitfield;
+            m_state_fullname_lookup[subStateBitfield] = subStates[i]->m_fullname;
+            m_state_bitname_lookup[subStates[i]->m_fullname] = subStateBitfield;
         }
 
         // calculate further sub-states bitfields.
-        for ( size_t i = 0; i < subStates.size(); ++i )
+        for (size_t i = 0; i < subStates.size(); ++i)
         {
-            calculateLookupKey( subStateBitfields[ i ], subStates[ i ] );
+            calculateLookupKey(subStateBitfields[i], subStates[i]);
         }
     }
 
@@ -815,27 +724,156 @@ namespace flow
     {
         const std::string& root_name = m_schema.m_transition_start_state_machine.m_next_state;
 
-        auto it = m_schema.m_states.find( root_name );
+        auto it = m_schema.m_states.find(root_name);
 
-        if ( it == m_schema.m_states.end() )
+        if (it == m_schema.m_states.end())
         {
             return false;
         }
 
-        schema::State* root = &( it->second );
+        schema::State* root = &(it->second);
 
         // root bitfield.
         Bitfield bitfield;
-        bitfield.setBit( 0, true );
+        bitfield.setBit(0, true);
 
         // add lookup entries.
-        m_state_lookup[ bitfield ] = root_name;
-        m_state_reverse_lookup[ root_name ] = bitfield;
+        m_state_fullname_lookup[bitfield] = root_name;
+        m_state_bitname_lookup[root_name] = bitfield;
 
         // calculate sub-states lookup tables.
-        calculateLookupKey( bitfield, root );
+        calculateLookupKey(bitfield, root);
 
         return true;
     }
-
 }
+
+#if defined(_DEBUG)
+namespace flow
+{
+    std::string StateMachine::evaluateCommonState(const std::string& state_a, const std::string& state_b) const
+    {
+        std::string common_state;
+
+        size_t len = std::min(state_a.length(), state_b.length());
+
+        for (size_t i = 0; i < len; ++i)
+        {
+            if (state_a[i] == state_b[i])
+            {
+                common_state.push_back(state_a[i]);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // root identifier.
+        if (common_state == "\\\\")
+        {
+            // just set to zero.
+            common_state.clear();
+        }
+
+        // remove trailing '\'.
+        if (!common_state.empty() && common_state.back() == '\\')
+        {
+            common_state.pop_back();
+        }
+        return common_state;
+    }
+
+    void StateMachine::evaluateTransitionOperationWithFullNames(std::string& state, bool& push_state, bool& pop_state) const
+    {
+        // default, do nothing.
+        push_state = false;
+        pop_state = false;
+
+        // no transition to process.
+        if (m_transition == nullptr)
+            return;
+
+        // where the transition is telling us to go to.
+        std::string state_to_reach = m_transition->getNextState();
+
+        // reached the bottom of the state machine, and that's where we want to be.
+        if (m_statesToUpdate.empty() && state_to_reach.empty())
+        {
+            // check if we're booting or re-booting the state machine.
+            if (m_transition->getEvent() == "start_state_machine" ||
+                m_transition->getEvent() == "restart_state_machine")
+            {
+                // the state we're trying to reach is now the startup state.
+                state_to_reach = m_schema.m_transition_start_state_machine.m_next_state;
+            }
+            // event is 'stop_state_machine', or some unknown event.
+            else
+            {
+                // stopping the state machine should be fired by the event 'stop_state_machine'.
+                if (m_transition->getEvent() != "stop_state_machine")
+                {
+                    logDebug(debug::LogLevel::Error, "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str());
+                }
+                // done. No push or pop of states required.
+                return;
+            }
+        }
+
+        // the name of the state at the top of the update stack. 
+        // '' if empty.
+        std::string state_current;
+
+        if (!m_statesToUpdate.empty())
+        {
+            state_current = m_statesToUpdate.front()->getFullName();
+        }
+
+        // transition points to the current state.
+        // So we want to restart the current state.
+        if (state_current == state_to_reach)
+        {
+            // start from the top, work your way down.
+            state = state_current;
+            pop_state = true;
+            return;
+        }
+
+        // find the branch state that is common to both the transition target and the current top-most state.
+        std::string state_common = evaluateCommonState(state_current, state_to_reach);
+
+        // we've reached the common state. start loading states.
+        if (state_common == state_current)
+        {
+            // the list of states that we'll eventually push onto the stack.
+            std::string states_to_push = state_to_reach.substr(state_common.length(), state_to_reach.length() - state_common.length());
+
+            if (states_to_push.find("\\\\") == 0)
+            {
+                states_to_push = states_to_push.substr(2, states_to_push.length() - 2);
+            }
+
+
+            if (states_to_push.find("\\") == 0)
+            {
+                states_to_push = states_to_push.substr(1, states_to_push.length() - 1);
+            }
+
+            // find the first state to push.
+            size_t pos = states_to_push.find_first_of('\\');
+
+            state = (pos != std::string::npos) ? state_common + std::string("\\") + states_to_push.substr(0, pos) : state_to_reach;
+
+            push_state = true;
+            return;
+        }
+        // we're not at the common state. Start unloading statesto reach the common state.
+        else
+        {
+            // start from the top, work your way down.
+            state = state_current;
+            pop_state = true;
+        }
+    }
+}
+#endif

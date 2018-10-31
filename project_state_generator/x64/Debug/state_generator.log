@@ -1,0 +1,12 @@
+﻿  bitfield.cpp
+  debug.cpp
+  state_machine_xml_loader.cpp
+  main_state_generator.cpp
+  test_generator.cpp
+  test_utils.cpp
+  tinystr.cpp
+  tinyxml.cpp
+  tinyxmlerror.cpp
+  tinyxmlparser.cpp
+  Generating Code...
+  state_generator.vcxproj -> E:\Documents\Code\hierarchical_state_machine\x64\Debug\state_generator.exe
