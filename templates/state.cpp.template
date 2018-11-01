@@ -9,7 +9,7 @@ namespace test
 {
     namespace states
     {
-        [#template.state.type]::[#template.state.type]( const flow::schema::State& schema, test::Game& game )
+        [#template.state.type]::[#template.state.type]( const hsm::schema::State& schema, test::Game& game )
             : test::StateBase( schema, game )
         {}
         

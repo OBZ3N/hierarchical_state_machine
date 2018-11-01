@@ -4,7 +4,7 @@
 
 namespace test
 {
-    AssetTest::AssetTest( const flow::schema::Asset& asset_schema )
+    AssetTest::AssetTest( const hsm::schema::Asset& asset_schema )
         : Asset( asset_schema )
     {
         m_load_completed_time = debug::random<unsigned int>( 100, 2000 );

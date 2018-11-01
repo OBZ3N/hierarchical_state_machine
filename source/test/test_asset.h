@@ -1,13 +1,13 @@
 
-#include "flow/asset.h"
-#include "flow/debug.h"
+#include "hsm/asset.h"
+#include "hsm/debug.h"
 
 namespace test
 {
-    class AssetTest : public flow::Asset
+    class AssetTest : public hsm::Asset
     {
     public:
-        AssetTest( const flow::schema::Asset& asset_schema );
+        AssetTest( const hsm::schema::Asset& asset_schema );
 
         virtual bool load() override;
         virtual bool isLoaded() const override;

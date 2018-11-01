@@ -1,9 +1,9 @@
 #pragma once
 
-#include "flow/schema.h"
-#include "flow/asset.h"
-#include "flow/state.h"
-#include "flow/debug.h"
+#include "hsm/schema.h"
+#include "hsm/asset.h"
+#include "hsm/state.h"
+#include "hsm/debug.h"
 #include "test/test_state_base.h"
 
 namespace test
@@ -15,10 +15,10 @@ namespace test
         public:
             // factory.
             static const char* GetTypeName() { return "\\\\Flow"; }
-            static Flow* Instantiate(const flow::schema::State& schema, test::Game& game ) { return new Flow( schema, game ); }
+            static Flow* Instantiate(const hsm::schema::State& schema, test::Game& game ) { return new Flow( schema, game ); }
 
         public:
-            Flow(const flow::schema::State& schema, test::Game& game);
+            Flow(const hsm::schema::State& schema, test::Game& game);
             ~Flow();
 
             virtual void enter() override;

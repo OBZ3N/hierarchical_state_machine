@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "flow/schema.h"
-#include "flow/asset.h"
-#include "flow/state.h"
-#include "flow/debug.h"
+#include "hsm/schema.h"
+#include "hsm/asset.h"
+#include "hsm/state.h"
+#include "hsm/debug.h"
 #include "test/test_state_base.h"
 
 namespace test
@@ -18,10 +18,10 @@ namespace test
         public:
             // factory.
             static const char* GetTypeName() { return "[#template.state.name]"; }
-            static [#template.state.type]* Instantiate(const flow::schema::State& schema, test::Game& game ) { return new [#template.state.type]( schema, game ); }
+            static [#template.state.type]* Instantiate(const hsm::schema::State& schema, test::Game& game ) { return new [#template.state.type]( schema, game ); }
 
         public:
-            [#template.state.type](const flow::schema::State& schema, test::Game& game);
+            [#template.state.type](const hsm::schema::State& schema, test::Game& game);
             ~[#template.state.type]();
 
             virtual void Enter() override;

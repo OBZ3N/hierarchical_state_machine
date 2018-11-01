@@ -17,7 +17,7 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{1fc50470-5299-4ca7-90d0-3d3ae3309662}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\flow">
+    <Filter Include="Source Files\hsm">
       <UniqueIdentifier>{71736b62-80cd-47aa-8967-363dbe5b4488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -37,20 +37,17 @@
     <ClCompile Include="..\source\tinyXML\tinyxmlparser.cpp">
       <Filter>Source Files\tinyXML</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\flow\debug.cpp">
-      <Filter>Source Files\flow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\flow\state_machine_xml_loader.cpp">
-      <Filter>Source Files\flow</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\test\test_generator.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
     <ClCompile Include="..\source\test\test_utils.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\flow\bitfield.cpp">
-      <Filter>Source Files\flow</Filter>
+    <ClCompile Include="..\source\hsm\debug.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp">
+      <Filter>Source Files\hsm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -76,23 +73,20 @@
     <ClInclude Include="..\source\tinyXML\tinyxml.h">
       <Filter>Source Files\tinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\flow\debug.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\schema.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\state_machine_xml_loader.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\test\test_generator.h">
       <Filter>Source Files\test</Filter>
     </ClInclude>
     <ClInclude Include="..\source\test\test_utils.h">
       <Filter>Source Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\flow\bitfield.h">
-      <Filter>Source Files\flow</Filter>
+    <ClInclude Include="..\source\hsm\debug.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\schema.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\state_machine_xml_loader.h">
+      <Filter>Source Files\hsm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

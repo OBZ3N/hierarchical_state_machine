@@ -1,6 +1,6 @@
 
 #include "test/test_interrupts.h"
-#include "flow/debug.h"
+#include "hsm/debug.h"
 
 namespace test
 {

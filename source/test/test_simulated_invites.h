@@ -2,7 +2,7 @@
 #pragma once
 
 #include <string>
-#include "flow/debug.h"
+#include "hsm/debug.h"
 #include "test/test_simulated_event.h"
 #include "test/test_Interrupts.h"
 

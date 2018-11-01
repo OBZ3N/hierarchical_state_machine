@@ -1,5 +1,5 @@
 
-#include "flow/state_machine_xml_loader.h"
+#include "hsm/state_machine_xml_loader.h"
 #include "test/test_generator.h"
 
 struct Settings
@@ -36,7 +36,7 @@ void main()
     Settings settings;
     
     // the state machine.
-    flow::StateMachineXmlLoader state_machine_xml_loader;
+    hsm::StateMachineXmlLoader state_machine_xml_loader;
 
     bool is_loaded = state_machine_xml_loader.load(settings.m_state_machine_input_xml);
 

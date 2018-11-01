@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "flow/schema.h"
+#include "hsm/schema.h"
 
 namespace test
 {
@@ -17,14 +17,14 @@ namespace test
             Backup = (1 << 1),
         };
 
-        StateMachineGenerator(const flow::schema::StateMachine& schema);
+        StateMachineGenerator(const hsm::schema::StateMachine& schema);
 
         // generate states, and the states factory table, for all states defined in the state machine schema.
         void generateCppFiles(const std::string& templates_path, const std::string& generated_path, int modes = Modes::Build);
 
-        const flow::schema::StateMachine& getSchema() const { return m_schema; }
+        const hsm::schema::StateMachine& getSchema() const { return m_schema; }
 
     private:
-        const flow::schema::StateMachine& m_schema;
+        const hsm::schema::StateMachine& m_schema;
     };
 }

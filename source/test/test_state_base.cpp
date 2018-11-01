@@ -3,8 +3,8 @@
 
 namespace test
 {
-    StateBase::StateBase( const flow::schema::State& schema, test::Game & game )
-        : flow::State( schema )
+    StateBase::StateBase( const hsm::schema::State& schema, test::Game & game )
+        : hsm::State( schema )
         , m_game( game)
     {}
 }

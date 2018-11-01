@@ -1,12 +1,12 @@
 
 #include <windows.h>
 
-#include "flow/schema.h"
-#include "flow/asset.h"
-#include "flow/state.h"
-#include "flow/state_machine.h"
-#include "flow/state_machine_factory.h"
-#include "flow/state_machine_xml_loader.h"
+#include "hsm/schema.h"
+#include "hsm/asset.h"
+#include "hsm/state.h"
+#include "hsm/state_machine.h"
+#include "hsm/state_machine_factory.h"
+#include "hsm/state_machine_xml_loader.h"
 #include "test/test_factory.h"
 #include "test/test_game.h"
 #include "test/test_simulated_event.h"
@@ -122,7 +122,7 @@ void main()
     Settings settings;
     
     // the state machine.
-    flow::StateMachine state_machine;
+    hsm::StateMachine state_machine;
     state_machine.load(settings.m_state_machine_input_xml);
 
     // the game environment.

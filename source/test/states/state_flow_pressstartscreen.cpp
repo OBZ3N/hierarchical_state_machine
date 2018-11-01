@@ -9,7 +9,7 @@ namespace test
 {
     namespace states
     {
-        Flow_PressStartScreen::Flow_PressStartScreen( const flow::schema::State& schema, test::Game& game )
+        Flow_PressStartScreen::Flow_PressStartScreen( const hsm::schema::State& schema, test::Game& game )
             : test::StateBase( schema, game )
             , m_simul_pressed_start("pressed_start", 0.0f, 10.0f)
             , m_simul_inactivity_timeout("inactivity_timeout", 5.0f, 5.0f)

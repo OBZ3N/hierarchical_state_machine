@@ -5,13 +5,13 @@
 #include <iomanip>
 #include <algorithm>
 #include <regex>
-#include "flow/debug.h"
+#include "hsm/debug.h"
 #include "test/test_utils.h"
 #include "test/test_generator.h"
 
 namespace test
 {
-    StateMachineGenerator::StateMachineGenerator(const flow::schema::StateMachine& schema)
+    StateMachineGenerator::StateMachineGenerator(const hsm::schema::StateMachine& schema)
         : m_schema(schema)
     {}
 

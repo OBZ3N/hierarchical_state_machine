@@ -11,9 +11,6 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{8660e4e2-e10d-4257-b735-76a91b494e15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\flow">
-      <UniqueIdentifier>{cfdb1a82-bfdc-4554-9638-3e3fa731b916}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\test\states">
       <UniqueIdentifier>{3858a0cd-d265-4a49-8747-76b41f7be51f}</UniqueIdentifier>
     </Filter>
@@ -23,17 +20,11 @@
     <Filter Include="Source Files\xmls">
       <UniqueIdentifier>{96d0cd86-c6b0-4b87-b229-6a355aa34791}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\hsm">
+      <UniqueIdentifier>{cfdb1a82-bfdc-4554-9638-3e3fa731b916}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\flow\debug.cpp">
-      <Filter>Source Files\flow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\flow\state_machine.cpp">
-      <Filter>Source Files\flow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\flow\state_machine_xml_loader.cpp">
-      <Filter>Source Files\flow</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\test\states\state_factory_table.cpp">
       <Filter>Source Files\test\states</Filter>
     </ClCompile>
@@ -94,35 +85,20 @@
     <ClCompile Include="..\source\test\test_interrupts.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\flow\bitfield.cpp">
-      <Filter>Source Files\flow</Filter>
+    <ClCompile Include="..\source\hsm\bitfield.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hsm\debug.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hsm\state_machine.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp">
+      <Filter>Source Files\hsm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\flow\asset.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\debug.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\schema.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\state.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\state_machine.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\state_machine_factory.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\state_machine_xml_loader.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\flow\transition.h">
-      <Filter>Source Files\flow</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\test\states\state_flow.h">
       <Filter>Source Files\test\states</Filter>
     </ClInclude>
@@ -174,8 +150,32 @@
     <ClInclude Include="..\source\test\test_schema.h">
       <Filter>Source Files\test</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\flow\bitfield.h">
-      <Filter>Source Files\flow</Filter>
+    <ClInclude Include="..\source\hsm\asset.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\bitfield.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\debug.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\schema.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\state.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\state_machine.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\state_machine_factory.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\state_machine_xml_loader.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\transition.h">
+      <Filter>Source Files\hsm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

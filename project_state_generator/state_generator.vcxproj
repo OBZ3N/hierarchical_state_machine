@@ -19,9 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\flow\bitfield.cpp" />
-    <ClCompile Include="..\source\flow\debug.cpp" />
-    <ClCompile Include="..\source\flow\state_machine_xml_loader.cpp" />
+    <ClCompile Include="..\source\hsm\debug.cpp" />
+    <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp" />
     <ClCompile Include="..\source\main_state_generator.cpp" />
     <ClCompile Include="..\source\test\test_generator.cpp" />
     <ClCompile Include="..\source\test\test_utils.cpp" />
@@ -39,10 +38,9 @@
     <Xml Include="..\xmls\state_machine.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\flow\bitfield.h" />
-    <ClInclude Include="..\source\flow\debug.h" />
-    <ClInclude Include="..\source\flow\schema.h" />
-    <ClInclude Include="..\source\flow\state_machine_xml_loader.h" />
+    <ClInclude Include="..\source\hsm\debug.h" />
+    <ClInclude Include="..\source\hsm\schema.h" />
+    <ClInclude Include="..\source\hsm\state_machine_xml_loader.h" />
     <ClInclude Include="..\source\test\test_generator.h" />
     <ClInclude Include="..\source\test\test_utils.h" />
     <ClInclude Include="..\source\tinyXML\tinystr.h" />

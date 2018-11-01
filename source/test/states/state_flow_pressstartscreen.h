@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "flow/schema.h"
-#include "flow/asset.h"
-#include "flow/state.h"
-#include "flow/debug.h"
+#include "hsm/schema.h"
+#include "hsm/asset.h"
+#include "hsm/state.h"
+#include "hsm/debug.h"
 #include "test/test_simulated_event.h"
 #include "test/test_state_base.h"
 #include "test/test_game.h"
@@ -20,10 +20,10 @@ namespace test
         public:
             // factory.
             static const char* GetTypeName() { return "\\\\Flow\\PressStartScreen"; }
-            static Flow_PressStartScreen* Instantiate(const flow::schema::State& schema, test::Game& game ) { return new Flow_PressStartScreen( schema, game ); }
+            static Flow_PressStartScreen* Instantiate(const hsm::schema::State& schema, test::Game& game ) { return new Flow_PressStartScreen( schema, game ); }
 
         public:
-            Flow_PressStartScreen(const flow::schema::State& schema, test::Game& game);
+            Flow_PressStartScreen(const hsm::schema::State& schema, test::Game& game);
             ~Flow_PressStartScreen();
 
             virtual void enter() override;

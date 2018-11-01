@@ -5,7 +5,7 @@ namespace test
 {
     namespace states
     {
-        Flow::Flow( const flow::schema::State& schema, test::Game& game )
+        Flow::Flow( const hsm::schema::State& schema, test::Game& game )
             : test::StateBase( schema, game )
             , m_simul_boot_sequence("boot_sequence_completed", 0.0f, 2.0f)
         {}

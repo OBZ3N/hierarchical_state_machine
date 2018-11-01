@@ -1,5 +1,5 @@
 
-#include "flow/debug.h"
+#include "hsm/debug.h"
 #include "test/test_simulated_session.h"
 
 namespace test
