@@ -1,3 +1,8 @@
+.vs/
+x64/
+project_state_machine/x64/
+project_state_generator/x64/
+
 # Prerequisites
 *.d
 
