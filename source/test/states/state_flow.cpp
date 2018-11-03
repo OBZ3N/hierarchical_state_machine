@@ -16,6 +16,7 @@ namespace test
         void Flow::enter()
         {
             m_game.start();
+            m_simul_boot_sequence.start();
         }
 
         std::string Flow::update()

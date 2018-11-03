@@ -26,9 +26,9 @@ public:
     Bitfield& operator |= ( const Bitfield& rhs );
     Bitfield& operator ^= ( const Bitfield& rhs );
 
-    Bitfield operator & ( const Bitfield& rhs ) const { Bitfield temp; return temp &= rhs; }
-    Bitfield operator | ( const Bitfield& rhs ) const { Bitfield temp; return temp |= rhs; }
-    Bitfield operator ^ ( const Bitfield& rhs ) const { Bitfield temp; return temp ^= rhs; }
+    Bitfield operator & ( const Bitfield& rhs ) const { Bitfield temp = (*this); return temp &= rhs; }
+    Bitfield operator | ( const Bitfield& rhs ) const { Bitfield temp = (*this); return temp |= rhs; }
+    Bitfield operator ^ ( const Bitfield& rhs ) const { Bitfield temp = (*this); return temp ^= rhs; }
     Bitfield operator ~ () const;
 
 private:

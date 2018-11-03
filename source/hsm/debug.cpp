@@ -207,21 +207,20 @@ namespace debug
         coords.X = 300;
         coords.Y = 300;
 
-        char buffer[512];
-        snprintf(buffer, sizeof(buffer), "%s (PID %d)", "State Machine", ::GetCurrentProcessId());
+        std::string header = formatString( "%s (PID %d)", "State Machine", ::GetCurrentProcessId() );
 
         // initialise screen buffer to a large value.
-        LOG_WIN32_API_CALL(::SetConsoleScreenBufferSize(s_hConsole, coords));
-        LOG_WIN32_API_CALL(::SetConsoleTitle(buffer));
+        LOG_WIN32_API_CALL( ::SetConsoleScreenBufferSize( s_hConsole, coords ) );
+        LOG_WIN32_API_CALL( ::SetConsoleTitle( header.c_str() ) );
 
         // Get maximum console window size allowed. 
         CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
-        LOG_WIN32_API_CALL(::GetConsoleScreenBufferInfo(s_hConsole, &screenBufferInfo));
+        LOG_WIN32_API_CALL( ::GetConsoleScreenBufferInfo( s_hConsole, &screenBufferInfo ) );
 
         // set screen buffer to x4 screen size.
         coords.X = screenBufferInfo.dwMaximumWindowSize.X;
         coords.Y = screenBufferInfo.dwMaximumWindowSize.Y * 4;
-        LOG_WIN32_API_CALL(::SetConsoleScreenBufferSize(s_hConsole, coords));
+        LOG_WIN32_API_CALL( ::SetConsoleScreenBufferSize( s_hConsole, coords ) );
 
         // Set buffer window size to maximum allowed.
         SMALL_RECT rect;
@@ -243,6 +242,49 @@ namespace debug
         LOG_WIN32_API_CALL(::SetCurrentConsoleFontEx(s_hConsole, FALSE, &cfi));
     }
 
+    bool showErrorDialog( LogLevel level, const std::string& message )
+    {
+        UINT style = 
+            ( level == LogLevel::SanityCheck || level == LogLevel::Fatal ) ?  ( MB_OK | MB_ICONERROR | MB_APPLMODAL ) :
+            ( MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION | MB_APPLMODAL );
+
+        std::string header = LogLevelToString( level );
+
+        int result = MessageBox( GetConsoleWindow(), message.c_str(), header.c_str(), style );
+
+        bool skippError = false;
+
+        switch ( result )
+        {
+        default:
+            {
+                break;
+            }
+        case IDOK:
+            {
+                abort();
+                break;
+            }
+        case IDABORT:
+            {
+                DebugBreak();
+                skippError = false;
+                break;
+            }
+        case IDRETRY:
+            {
+                skippError = false;
+                break;
+            }
+        case  IDIGNORE:
+            {
+                skippError = true;
+                break;
+            }
+        }
+        return skippError;
+    }
+
     const char* LogLevelToString(LogLevel level)
     {
         switch (level)
@@ -253,7 +295,7 @@ namespace debug
         case LogLevel::Warning:     return "Warning";
         case LogLevel::Error:       return "Error";
         case LogLevel::Fatal:       return "Fatal";
-        case LogLevel::SanityCheck: return "Sanity";
+        case LogLevel::SanityCheck: return "SanityCheck";
         }
     }
 
@@ -287,8 +329,11 @@ namespace debug
         return (ms - s_timestamp_origin);
     }
 
-    void assertArgs( bool condition, const char* condition_string, LogLevel level, const char* file, int line, const char* format, ... )
+    void assertArgs( bool& skipAssert, bool condition, const char* condition_string, LogLevel level, const char* file, int line, const char* format, ... )
     {
+        if ( skipAssert )
+            return;
+
         if ( condition )
             return;
 
@@ -305,8 +350,10 @@ namespace debug
                 << "message   : " << message << std::endl;
 
         logDebug( level, stream.str().c_str() );
-    }
 
+        skipAssert = showErrorDialog( level, stream.str() );
+    }
+    
     void logDebug(LogLevel level, const char* format, ...)
     {
         va_list args;

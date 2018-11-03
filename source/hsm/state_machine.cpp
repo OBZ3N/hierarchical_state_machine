@@ -138,8 +138,6 @@ namespace hsm
     // loading the schemas and initialising the states.
     void StateMachine::restart()
     {
-        m_statusString = "STARTING";
-
         if (m_factory == nullptr)
         {
             logDebug(debug::LogLevel::Error, "Factory is nullptr.");
@@ -148,6 +146,11 @@ namespace hsm
 
         if (isStarted())
         {
+            m_statusString = "RESTARTING";
+
+            if ( m_transition != nullptr )
+                delete m_transition;
+
             // need to exit first before restarting.
             schema::Transition start_transition;
             start_transition.m_next_state = "";
@@ -156,6 +159,11 @@ namespace hsm
         }
         else
         {
+            m_statusString = "STARTING";
+
+            if ( m_transition != nullptr )
+                delete m_transition;
+
             // can start with a new transition.
             m_transition = m_factory->createTransition(m_schema.m_transition_start_state_machine);
         }
@@ -345,11 +353,6 @@ namespace hsm
 
             logDebug(debug::LogLevel::Info, "exited.");
 
-            // cleanup.
-            delete state;
-
-            logDebug(debug::LogLevel::Trace, "state '%s' destroyed.", state_name);
-
             m_statesToUpdate.pop_front();
 
             // start unloading assets.
@@ -366,6 +369,11 @@ namespace hsm
 
                 logDebug(debug::LogLevel::Trace, "unloading %d assets...", m_assetsToUnload.size());
             }
+
+            // cleanup.
+            delete state;
+
+            logDebug( debug::LogLevel::Trace, "state '%s' destroyed.", state_name );
 
             // run one update.
             updateAssetsToUnload();
@@ -437,7 +445,6 @@ namespace hsm
         if (push_state || pop_state)
         {
             // find state name matching the bitname.
-            std::string state_name;
             auto it = m_state_fullname_lookup.find(state_bitname);
             if (it == m_state_fullname_lookup.end())
             {
@@ -446,27 +453,27 @@ namespace hsm
                 pop_state = false;
                 return;
             }
-            state_name = it->second;
+            state_fullname = it->second;
         }
     }
 
     // find what operation needs to be performed for the transition.
-    void StateMachine::evaluateTransitionOperation(Bitfield& state_bitname, bool& push_state, bool& pop_state) const
+    void StateMachine::evaluateTransitionOperation( Bitfield& state_bitname, bool& push_state, bool& pop_state ) const
     {
         // default, do nothing.
         push_state = false;
         pop_state = false;
 
         // no transition to process.
-        if (m_transition == nullptr)
+        if ( m_transition == nullptr )
             return;
 
         // reached the bottom of the state machine, and transition tries to reach the bottom.
-        if (m_statesToUpdate.empty() && m_transition->getNextState().empty())
+        if ( m_statesToUpdate.empty() && m_transition->getNextState().empty() )
         {
             // check if we're booting or re-booting the state machine.
-            if (m_transition->getEvent() == "_start" ||
-                m_transition->getEvent() == "_restart")
+            if ( m_transition->getEvent() == "_start" ||
+                 m_transition->getEvent() == "_restart" )
             {
                 // the state we're trying to reach is the root state.
                 state_bitname.setBit(0, true);
@@ -475,21 +482,21 @@ namespace hsm
             }
 
             // stopping the state machine should be fired by the event 'stop_state_machine'.
-            ASSERT_SANITY( m_transition->getEvent() == "_exit" , "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str());
+            ASSERT_SANITY( m_transition->getEvent() == "_exit" , "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str() );
             return;
         }
 
         // find state bitname we're trying to reach.
         auto it = m_state_bitname_lookup.find(m_transition->getNextState());
-        if (it == m_state_bitname_lookup.end())
+        if ( it == m_state_bitname_lookup.end() )
         {
             // do nothing. maybe an error in the xml definition, so we'll be stuck here, but that's ok.
-            logDebug(debug::LogLevel::Error, "could not find lookup bitfield for state '%s'.", m_transition->getNextState().c_str());
+            logDebug( debug::LogLevel::Error, "could not find lookup bitfield for state '%s'.", m_transition->getNextState().c_str() );
             return;
         }
 
         // state stack is empty. Just go to root state.
-        if (m_statesToUpdate.empty())
+        if ( m_statesToUpdate.empty() )
         {
             // the state we're trying to reach is now the startup state.
             state_bitname.setBit(0, true);
@@ -498,11 +505,11 @@ namespace hsm
         }
 
         // find state bitname we're currently at.
-        auto jt = m_state_bitname_lookup.find(m_statesToUpdate.front()->getSchema().m_fullname);
-        if (jt == m_state_bitname_lookup.end())
+        auto jt = m_state_bitname_lookup.find( m_statesToUpdate.front()->getSchema().m_fullname );
+        if ( jt == m_state_bitname_lookup.end() )
         {
             //. this is not ok. SHould not happen.
-            logDebug(debug::LogLevel::SanityCheck, "could not find lookup bitfield for state '%s'.", m_statesToUpdate.front()->getSchema().m_fullname.c_str());
+            logDebug( debug::LogLevel::SanityCheck, "could not find lookup bitfield for state '%s'.", m_statesToUpdate.front()->getSchema().m_fullname.c_str() );
             return;
         }
 
@@ -511,7 +518,7 @@ namespace hsm
         const Bitfield& state_current = jt->second;
 
         // both match each other. It's a restart request.
-        if (state_to_reach == state_current)
+        if ( state_to_reach == state_current )
         {
             // restart the state.
             state_bitname = state_current;
@@ -523,17 +530,17 @@ namespace hsm
         Bitfield common_bitfield = state_to_reach & state_current;
 
         // we've reached the common state. start loading states.
-        if (common_bitfield == state_current)
+        if ( common_bitfield == state_current )
         {
-            for (size_t i = state_current.getNumBits(); i < state_to_reach.getNumBits(); ++i)
+            for ( size_t i = state_current.getNumBits(); i < state_to_reach.getNumBits(); ++i )
             {
                 // stop at first bitfield with a bit set to true.
                 // that will be the first sub-state we need to enter.
-                if (state_current.getBit(i))
+                if ( state_to_reach.getBit( i ) )
                 {
                     // generate the sub-state bitfield we need to enter.
                     state_bitname = common_bitfield;
-                    state_bitname.setBit(i, true);
+                    state_bitname.setBit( i, true );
                     push_state = true;
                     return;
                 }
@@ -555,20 +562,20 @@ namespace hsm
 
         Asset* asset = first_asset;
 
-        while (asset != nullptr)
+        while ( asset != nullptr )
         {
             // sanity check.
-            ASSERT_SANITY(!m_statesToUpdate.empty(),
+            ASSERT_SANITY( !m_statesToUpdate.empty(),
                 "asset '%s' for state '%s'. No state are being updated.",
                 asset->getSchema().m_asset_name.c_str(),
-                asset->getSchema().m_state_name.c_str());
+                asset->getSchema().m_state_name.c_str() );
 
             // sanity check.
-            ASSERT_SANITY(asset->getSchema().m_state_name == m_statesToUpdate.front()->getFullName(),
+            ASSERT_SANITY( asset->getSchema().m_state_name == m_statesToUpdate.front()->getFullName(),
                 "asset '%s' for state '%s'. topmost state '%s' doesn't match.",
                 asset->getSchema().m_asset_name.c_str(),
                 asset->getSchema().m_state_name.c_str(),
-                m_statesToUpdate.front()->getFullName().c_str());
+                m_statesToUpdate.front()->getFullName().c_str() );
 
             // start loading, if necessary.
             bool asset_load_started = asset->isLoading() ? true : asset->load();
@@ -577,9 +584,9 @@ namespace hsm
             bool asset_load_finished = asset_load_started && asset->isLoaded();
 
             // no loading further required.
-            if (!asset_load_started || asset_load_finished)
+            if ( !asset_load_started || asset_load_finished )
             {
-                logDebug(debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_load_started ? "loaded" : "load skipped");
+                logDebug( debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_load_started ? "loaded" : "load skipped" );
 
                 // move to the next asset to load.
                 m_assetsToLoad.pop_front();
@@ -598,7 +605,7 @@ namespace hsm
             if (first_asset != nullptr)
             {
                 // we had at least some assets to load. Tell when it's finished.
-                logDebug(debug::LogLevel::Trace, "all assets loaded.");
+                logDebug( debug::LogLevel::Trace, "all assets loaded." );
             }
 
             // now enter the front state, which should be the state we've loaded assets for.
@@ -610,9 +617,9 @@ namespace hsm
             logDebug(debug::LogLevel::Info, "entered.");
 
             // we've reached the state requested by the transition.
-            if (m_transition != nullptr && state->getSchema().m_fullname == m_transition->getNextState())
+            if ( m_transition != nullptr && state->getSchema().m_fullname == m_transition->getNextState() )
             {
-                logDebug(debug::LogLevel::Trace, "transition completed. We've reached our target state.");
+                logDebug( debug::LogLevel::Trace, "transition completed." );
 
                 // we can destroy the transition now.
                 delete m_transition;
@@ -629,15 +636,15 @@ namespace hsm
 
         Asset* asset = first_asset;
 
-        while (asset != nullptr)
+        while ( asset != nullptr )
         {
             bool asset_unload_started = asset->isUnloading() ? true : asset->unload();
 
             bool asset_unload_finished = asset_unload_started && asset->isUnloaded();
 
-            if (!asset_unload_started || asset_unload_finished)
+            if ( !asset_unload_started || asset_unload_finished )
             {
-                logDebug(debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_unload_started ? "unloaded" : "unload skipped");
+                logDebug( debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_unload_started ? "unloaded" : "unload skipped" );
 
                 // pop back the last asset.
                 m_assetsToUnload.pop_back();
@@ -651,10 +658,10 @@ namespace hsm
         }
 
         // unloading finished.
-        if (asset == nullptr && first_asset != nullptr)
+        if ( asset == nullptr && first_asset != nullptr )
         {
             // we had assets to unload. Tell when it's finished.
-            logDebug(debug::LogLevel::Trace, "all assets unloaded.");
+            logDebug( debug::LogLevel::Trace, "all assets unloaded." );
         }
     }
 
@@ -664,18 +671,18 @@ namespace hsm
 
         std::string parent_name = parent->m_fullname;
 
-        for (auto& state_schema : m_schema.m_states)
+        for ( auto& state_schema : m_schema.m_states )
         {
             std::string state_name = state_schema.second.m_fullname;
 
-            size_t pos = state_name.find(parent_name);
+            size_t pos = state_name.find( parent_name );
 
             if (pos != 0)
                 continue;
 
-            std::string sub_state_name = state_name.substr(parent_name.size());
+            std::string sub_state_name = state_name.substr( parent_name.size() );
 
-            pos = sub_state_name.rfind("\\");
+            pos = sub_state_name.rfind( "\\" );
 
             if (pos != 0)
                 continue;
@@ -686,19 +693,19 @@ namespace hsm
         return sub_states;
     }
 
-    void StateMachine::calculateLookupKey(const Bitfield& bitfield, const schema::State* state)
+    void StateMachine::calculateLookupKey( const Bitfield& bitfield, const schema::State* state )
     {
         // find sub-states.
-        std::vector<schema::State*> subStates = calculateSubStates(state);
+        std::vector<schema::State*> subStates = calculateSubStates( state );
 
         // calculate sub-states bitfields.
         std::vector<Bitfield> subStateBitfields;
 
-        for (size_t i = 0; i < subStates.size(); ++i)
+        for ( size_t i = 0; i < subStates.size(); ++i )
         {
             Bitfield subStateBitfield = bitfield;
 
-            for (size_t j = 0; j < subStates.size(); ++j)
+            for ( size_t j = 0; j < subStates.size(); ++j )
             {
                 bool value = (j == i) ? true : false;
 
