@@ -19,6 +19,7 @@ namespace debug
         Count
     };
 
+    // pseudo-random functions.
     extern void randomSeed(unsigned int seed);
 
     extern float randomFloat();
@@ -31,6 +32,7 @@ namespace debug
         return (type) (a + rnd * (b - a));
     }
 
+    // millisecond timer / stopwatch.
     struct Timer
     {
     public:

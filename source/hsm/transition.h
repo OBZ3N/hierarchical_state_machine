@@ -4,6 +4,7 @@
 
 namespace hsm
 {
+    // transition, taking an event, and pointing to a desired state.
     class Transition
     {
     public:

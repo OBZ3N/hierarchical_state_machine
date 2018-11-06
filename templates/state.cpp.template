@@ -16,17 +16,17 @@ namespace test
         [#template.state.type]::~[#template.state.type]()
         {}
 
-        void [#template.state.type]::Enter()
+        void [#template.state.type]::enter()
         {
              debug::logWarning("[TEST] [TODO] IMPLEMENT ME ('%s').", "[#template.state.type]");
         }
 
-        std::string [#template.state.type]::Update()
+        std::string [#template.state.type]::update()
         {
             return std::string();
         }
 
-        void [#template.state.type]::Exit()
+        void [#template.state.type]::exit()
         {
 
         }

@@ -127,6 +127,7 @@ void main()
 
     // the game environment.
     test::Game the_game;
+    the_game.initialise();
 
     // the factory that will instantiate states for the state machine.
     test::StateMachineFactory state_machine_factory(state_machine.getSchema(), the_game );
@@ -159,4 +160,6 @@ void main()
 
         Sleep(10);
     }
+
+    the_game.shutdown();
 }

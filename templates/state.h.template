@@ -24,9 +24,9 @@ namespace test
             [#template.state.type](const hsm::schema::State& schema, test::Game& game);
             ~[#template.state.type]();
 
-            virtual void Enter() override;
-            virtual std::string Update() override;
-            virtual void Exit() override;
+            virtual void enter() override;
+            virtual std::string update() override;
+            virtual void exit() override;
 
         private:
 

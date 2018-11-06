@@ -5,7 +5,7 @@
 namespace hsm
 {
     // single state of the state machine.
-    // Update() will return an event that will interrupt the execution of the update stack, 
+    // update() will return an event that will interrupt the execution of the update stack, 
     // and fire a transition.
     class State
     {

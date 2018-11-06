@@ -97,6 +97,93 @@
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp">
       <Filter>Source Files\hsm</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_attractscreen.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_checkinvite.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_createsession.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_campaignmenu.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_mainmenu.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_createsession.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_findsession.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_joinsession.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_lobby.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_lobby_waitforplayers.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayermenu.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_frontend_optionsmenu.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_joininvite.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_joinsession.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_loading.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_postunloading.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_racing.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_unloading.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\test\states\state_flow_race_waitfortrackdatasync.cpp">
+      <Filter>Source Files\test\states</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\test\states\state_flow.h">
@@ -176,6 +263,93 @@
     </ClInclude>
     <ClInclude Include="..\source\hsm\transition.h">
       <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_attractscreen.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_checkinvite.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_createsession.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_campaignmenu.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_mainmenu.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_createsession.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_findsession.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_joinsession.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_lobby.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_lobby_waitforplayers.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayermenu.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_frontend_optionsmenu.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_joininvite.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_joinsession.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_loading.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_postunloading.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_racing.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_unloading.h">
+      <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\test\states\state_flow_race_waitfortrackdatasync.h">
+      <Filter>Source Files\test\states</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

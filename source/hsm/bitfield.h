@@ -4,6 +4,8 @@
 #include <cstdint>
 #include<algorithm>
 
+
+// bitfield representation of a state in a satte machine hierarchy.
 class Bitfield
 {
 public:
@@ -38,6 +40,7 @@ private:
 
 namespace std
 {
+    // hash calculator for bitfields stored as key in a unordered map.
     template<>
     struct hash<Bitfield>
     {

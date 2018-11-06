@@ -248,7 +248,7 @@ namespace hsm
         // no transitions being processed, update state stacks to find the next transition.
         if (m_transition == nullptr)
         {
-            m_statusString = "UPDATING_STATES";
+            m_statusString = "UPDATING";
             updateStatesStack();
         }
 
@@ -373,14 +373,13 @@ namespace hsm
             // cleanup.
             delete state;
 
-            logDebug( debug::LogLevel::Trace, "state '%s' destroyed.", state_name );
+            logDebug( debug::LogLevel::Trace, "state '%s' destroyed.", state_name.c_str() );
 
             // run one update.
             updateAssetsToUnload();
         }
-
         // we need to push states on the stack to reach the transition's state target.
-        if (push_state)
+        else if (push_state)
         {
             auto it = m_schema.m_states.find(state_name);
 
@@ -425,9 +424,8 @@ namespace hsm
                 updateAssetsToLoad();
             }
         }
-
         // nothing to do, clear transition.
-        if (!pop_state && !push_state)
+        else if (!pop_state && !push_state)
         {
             // Clear everything, we're done.
             delete m_transition;
@@ -534,11 +532,11 @@ namespace hsm
         {
             for ( size_t i = state_current.getNumBits(); i < state_to_reach.getNumBits(); ++i )
             {
-                // stop at first bitfield with a bit set to true.
-                // that will be the first sub-state we need to enter.
+                // stop at first bit set to true.
+                // that will be the first state we need to enter.
                 if ( state_to_reach.getBit( i ) )
                 {
-                    // generate the sub-state bitfield we need to enter.
+                    // generate the state bitfield we need to enter.
                     state_bitname = common_bitfield;
                     state_bitname.setBit( i, true );
                     push_state = true;
@@ -583,7 +581,7 @@ namespace hsm
             // check if loading completed.
             bool asset_load_finished = asset_load_started && asset->isLoaded();
 
-            // no loading further required.
+            // asset is done.
             if ( !asset_load_started || asset_load_finished )
             {
                 logDebug( debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_load_started ? "loaded" : "load skipped" );
@@ -595,6 +593,7 @@ namespace hsm
             }
             else
             {
+                // asset still loading. exit.
                 break;
             }
         }
@@ -638,10 +637,13 @@ namespace hsm
 
         while ( asset != nullptr )
         {
+            // start unloading, if necessary.
             bool asset_unload_started = asset->isUnloading() ? true : asset->unload();
 
+            // check if unloading completed.
             bool asset_unload_finished = asset_unload_started && asset->isUnloaded();
 
+            // asset is done.
             if ( !asset_unload_started || asset_unload_finished )
             {
                 logDebug( debug::LogLevel::Trace, "asset '%s' %s.", asset->getSchema().m_asset_name.c_str(), asset_unload_started ? "unloaded" : "unload skipped" );
@@ -653,6 +655,7 @@ namespace hsm
             }
             else
             {
+                // asset still unloading. exit.
                 break;
             }
         }
@@ -665,6 +668,7 @@ namespace hsm
         }
     }
 
+    // calculate the list of child states for a given state.
     std::vector<schema::State*> StateMachine::calculateSubStates(const schema::State* parent)
     {
         std::vector<schema::State*> sub_states;
@@ -693,14 +697,16 @@ namespace hsm
         return sub_states;
     }
 
+    // calculate bitfields for the state hierarchy under a state.
     void StateMachine::calculateLookupKey( const Bitfield& bitfield, const schema::State* state )
     {
         // find sub-states.
         std::vector<schema::State*> subStates = calculateSubStates( state );
 
-        // calculate sub-states bitfields.
+        // calculate child states bitfields.
         std::vector<Bitfield> subStateBitfields;
 
+        // generate bitfields for each child state.
         for ( size_t i = 0; i < subStates.size(); ++i )
         {
             Bitfield subStateBitfield = bitfield;
@@ -714,7 +720,7 @@ namespace hsm
 
             subStateBitfields.push_back(subStateBitfield);
 
-            // store lookup entries.
+            // store lookup entries for the child state.
             m_state_fullname_lookup[subStateBitfield] = subStates[i]->m_fullname;
             m_state_bitname_lookup[subStates[i]->m_fullname] = subStateBitfield;
         }
@@ -726,8 +732,10 @@ namespace hsm
         }
     }
 
+    // calculate bitfield lookup table for each satte in the state machine.
     bool StateMachine::calculateLookupTable()
     {
+        // find the root.
         const std::string& root_name = m_schema.m_transition_start_state_machine.m_next_state;
 
         auto it = m_schema.m_states.find(root_name);
@@ -747,7 +755,7 @@ namespace hsm
         m_state_fullname_lookup[bitfield] = root_name;
         m_state_bitname_lookup[root_name] = bitfield;
 
-        // calculate sub-states lookup tables.
+        // calculate bitfields for each sub-state under the root.
         calculateLookupKey(bitfield, root);
 
         return true;

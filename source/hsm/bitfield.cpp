@@ -29,13 +29,15 @@ void Bitfield::setBit( size_t position, bool value )
 {
     size_t word_pos = position / 64;
     size_t bit_pos = position & 63;
-        
+
+    // add extra words to store the bit at the required position.
     for ( size_t i = m_bitfield.size(); i <= word_pos; ++i )
     {
         uint64_t val = 0;
         m_bitfield.push_back( val );
     }
 
+    // set or unset the bit.
     if ( value )
     {
         m_bitfield[ word_pos ] |= ( (uint64_t)1 << (uint64_t)bit_pos );
@@ -52,11 +54,12 @@ std::size_t Bitfield::gethash() const
 {
     std::hash<uint64_t> hasher;
 
-    size_t seed = 0;
+    uint64_t seed = 0;
 
+    // compute hash from bitfields.
     for ( auto word : m_bitfield )
     {
-        seed ^= hasher( word ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+        seed ^= hasher( word ) + (uint64_t)0x9e3779b9 + ( seed << (uint64_t)6 ) + ( seed >> (uint64_t)2 );
     }
 
     return seed;
@@ -74,6 +77,7 @@ bool Bitfield::operator == ( const Bitfield& rhs ) const
         }
     }
 
+    // check extended bitfields are set to zero.
     for ( size_t i = len; i < m_bitfield.size(); ++i )
     {
         if ( m_bitfield[ i ] != 0 )

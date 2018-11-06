@@ -1,6 +1,8 @@
 
+#include "hsm/debug.h"
 #include "hsm/state_machine_xml_loader.h"
 #include "test/test_generator.h"
+
 
 struct Settings
 {
@@ -40,10 +42,7 @@ void main()
 
     bool is_loaded = state_machine_xml_loader.load(settings.m_state_machine_input_xml);
 
-    if ( !is_loaded )
-    {
-        exit( -1 );
-    }
+    ASSERT_FATAL( is_loaded, "failed to load state machine xml '%s'", settings.m_state_machine_input_xml.c_str() );
 
     test::StateMachineGenerator state_machine_generator( state_machine_xml_loader.getSchema() );
 

@@ -16,7 +16,7 @@ namespace test
     public:
         Game();
 
-        void load();
+        void initialise();
         void shutdown();
 
         void start();

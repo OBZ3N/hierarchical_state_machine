@@ -19,7 +19,7 @@
     <asset id="attract_videos"/>
     <transition event="invite_accepted" next_state="PressStartScreen" />
     <transition event="attract_timeout" next_state="PressStartScreen"/>
-    <transition event="start_pressed" next_state="PressStartScreen"/>
+    <transition event="attract_cancelled" next_state="PressStartScreen"/>
   </AttractScreen>
 
   <CheckInvite>
@@ -35,7 +35,7 @@
   <CreateSession>
     <transition event="session_created" next_state="FrontEnd/Multiplayer/Lobby" />
     <transition event="session_create_failed" next_state="PressStartScreen" />
-  </CreateSession>      
+  </CreateSession>
 
   <JoinSession>
     <transition event="joined_session" next_state="FrontEnd/Multiplayer/Lobby" />

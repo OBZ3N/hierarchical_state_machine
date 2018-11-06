@@ -11,7 +11,7 @@ namespace test
         , m_simul_invites( nullptr )
     {}
 
-    void Game::load()
+    void Game::initialise()
     {
         m_interrupt_manager = new test::InterruptManager( m_schema.m_interrupt_manager );
         m_simul_session = new test::SimulatedSession( *m_interrupt_manager );
