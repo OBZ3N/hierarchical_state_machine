@@ -18,6 +18,7 @@ namespace hsm
     {
         m_statusString = "NULL";
         m_transition = nullptr;
+        m_restart = nullptr;
     }
 
     StateMachine::~StateMachine()
@@ -72,6 +73,9 @@ namespace hsm
 
         for (auto state : m_statesToUpdate)
             delete state;
+
+        delete m_restart;
+        m_restart = nullptr;
 
         delete m_transition;
         m_transition = nullptr;
@@ -132,7 +136,28 @@ namespace hsm
         if (isStarted())
             return;
 
-        restart();
+        if ( m_factory == nullptr )
+        {
+            logDebug( debug::LogLevel::Error, "Factory is nullptr." );
+            return;
+        }
+
+        // disable restarts
+        if ( m_restart != nullptr )
+            delete m_restart;
+        m_restart = nullptr;
+
+        if ( m_transition != nullptr )
+            delete m_transition;
+        m_transition = nullptr;
+
+        schema::Transition start_transition;
+        start_transition.m_next_state = m_schema.m_initial_state;
+        start_transition.m_event_name = "_enter";
+
+        m_transition = m_factory->createTransition( start_transition );
+
+        m_statusString = "STARTING";
     }
 
     // loading the schemas and initialising the states.
@@ -144,29 +169,31 @@ namespace hsm
             return;
         }
 
-        if (isStarted())
-        {
-            m_statusString = "RESTARTING";
+        // clean old transition.
+        if ( m_transition != nullptr )
+            delete m_transition;
+        m_transition = nullptr;
 
-            if ( m_transition != nullptr )
-                delete m_transition;
+        // first, do an exit transition.
+        schema::Transition stop_schema;
+        stop_schema.m_next_state = "";
+        stop_schema.m_event_name = "_exit";
 
-            // need to exit first before restarting.
-            schema::Transition start_transition;
-            start_transition.m_next_state = "";
-            start_transition.m_event_name = "_restart";
-            m_transition = m_factory->createTransition(start_transition);
-        }
-        else
-        {
-            m_statusString = "STARTING";
+        m_transition = m_factory->createTransition( stop_schema );
 
-            if ( m_transition != nullptr )
-                delete m_transition;
+        // clean old restart.
+        if ( m_restart != nullptr )
+            delete m_restart;
+        m_restart = nullptr;
 
-            // can start with a new transition.
-            m_transition = m_factory->createTransition(m_schema.m_transition_start_state_machine);
-        }
+        // second, cache a new restart transition.
+        schema::Transition restart_schema;
+        restart_schema.m_next_state = m_schema.m_initial_state;
+        restart_schema.m_event_name = "_enter";
+
+        m_restart = m_factory->createTransition( restart_schema );
+        
+        m_statusString = "RESTARTING";
     }
 
     void StateMachine::stop()
@@ -175,31 +202,40 @@ namespace hsm
         if (isStopped())
             return;
 
-        m_statusString = "STOPPING";
+        if ( m_factory == nullptr )
+        {
+            logDebug( debug::LogLevel::Error, "Factory is nullptr." );
+            return;
+        }
+        
+        // stop restarts.
+        if ( m_restart != nullptr )
+            delete m_restart;
+        m_restart = nullptr;
+
+        // clean old transition.
+        if ( m_transition != nullptr )
+            delete m_transition;
+        m_transition = nullptr;
 
         // generate a stopping transition.
-        schema::Transition stop_transition;
-        stop_transition.m_next_state = "";
-        stop_transition.m_event_name = "_exit";
+        schema::Transition stop_schema;
+        stop_schema.m_event_name = "_exit";
+        stop_schema.m_next_state = "";
+               
+        m_transition = m_factory->createTransition( stop_schema );
 
-        // override old transition. 
-        if (m_transition != nullptr)
-            delete m_transition;
-
-        if (m_factory == nullptr)
-        {
-            logDebug(debug::LogLevel::Error, "Factory is nullptr.");
-        }
-        else
-        {
-            m_transition = m_factory->createTransition(stop_transition);
-        }
+        m_statusString = "STOPPING";
     }
 
     bool StateMachine::isStopped() const
     {
         // transitioning. Not finished.
         if (m_transition != nullptr)
+            return false;
+
+        // transitioning. Not finished.
+        if ( m_restart != nullptr )
             return false;
 
         // still states being updated.
@@ -424,13 +460,6 @@ namespace hsm
                 updateAssetsToLoad();
             }
         }
-        // nothing to do, clear transition.
-        else if (!pop_state && !push_state)
-        {
-            // Clear everything, we're done.
-            delete m_transition;
-            m_transition = nullptr;
-        }
     }
 
     void StateMachine::evaluateTransitionOperation(std::string& state_fullname, bool& push_state, bool& pop_state) const
@@ -468,22 +497,8 @@ namespace hsm
 
         // reached the bottom of the state machine, and transition tries to reach the bottom.
         if ( m_statesToUpdate.empty() && m_transition->getNextState().empty() )
-        {
-            // check if we're booting or re-booting the state machine.
-            if ( m_transition->getEvent() == "_start" ||
-                 m_transition->getEvent() == "_restart" )
-            {
-                // the state we're trying to reach is the root state.
-                state_bitname.setBit(0, true);
-                push_state = true;
-                return;
-            }
-
-            // stopping the state machine should be fired by the event 'stop_state_machine'.
-            ASSERT_SANITY( m_transition->getEvent() == "_exit" , "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str() );
             return;
-        }
-
+        
         // find state bitname we're trying to reach.
         auto it = m_state_bitname_lookup.find(m_transition->getNextState());
         if ( it == m_state_bitname_lookup.end() )
@@ -624,6 +639,14 @@ namespace hsm
                 delete m_transition;
 
                 m_transition = nullptr;
+
+                // we have a resatrt transition pending. 
+                if ( m_restart != nullptr )
+                {
+                    // run the restart transition once the current transition is completed.
+                    m_transition = m_restart;
+                    m_restart = nullptr;
+                }
             }
         }
     }
@@ -736,7 +759,7 @@ namespace hsm
     bool StateMachine::calculateLookupTable()
     {
         // find the root.
-        const std::string& root_name = m_schema.m_transition_start_state_machine.m_next_state;
+        const std::string& root_name = m_schema.m_initial_state;
 
         auto it = m_schema.m_states.find(root_name);
 
@@ -813,27 +836,8 @@ namespace hsm
 
         // reached the bottom of the state machine, and that's where we want to be.
         if (m_statesToUpdate.empty() && state_to_reach.empty())
-        {
-            // check if we're booting or re-booting the state machine.
-            if (m_transition->getEvent() == "_start" ||
-                m_transition->getEvent() == "_restart")
-            {
-                // the state we're trying to reach is now the startup state.
-                state_to_reach = m_schema.m_transition_start_state_machine.m_next_state;
-            }
-            // event is 'stop_state_machine', or some unknown event.
-            else
-            {
-                // stopping the state machine should be fired by the event 'stop_state_machine'.
-                if (m_transition->getEvent() != "_exit")
-                {
-                    logDebug(debug::LogLevel::Error, "state machine is stopped by an unexpected event '%s'.", m_transition->getEvent().c_str());
-                }
-                // done. No push or pop of states required.
-                return;
-            }
-        }
-
+            return;
+        
         // the name of the state at the top of the update stack. 
         // '' if empty.
         std::string state_current;

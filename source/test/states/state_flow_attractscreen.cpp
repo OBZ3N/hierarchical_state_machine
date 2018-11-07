@@ -44,6 +44,8 @@ namespace test
             {
                 return event;
             }
+
+            return "";
         }
 
         void Flow_AttractScreen::exit()

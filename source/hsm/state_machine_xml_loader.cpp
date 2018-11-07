@@ -112,7 +112,7 @@ namespace hsm
 
     bool StateMachineXmlLoader::validateSchema()
     {
-        if ( m_schema.m_transition_start_state_machine.m_next_state == "" )
+        if ( m_schema.m_initial_state == "" )
         {
             logDebug( debug::LogLevel::Error, "starting transition is undefined." );
             return false;
@@ -126,18 +126,6 @@ namespace hsm
 
             for ( auto& transition : state.m_transitions )
             {
-                if ( transition.m_event_name == "_start" || transition.m_event_name == "_restart" || transition.m_event_name == "_exit" )
-                {
-                    if ( !transition.m_next_state.empty() )
-                    {
-                        logDebug( debug::LogLevel::Error, "<%s> transition('%s', '%s'). 'next_state' should be null.",
-                            state.m_fullname.c_str(),
-                            transition.m_event_name.c_str(),
-                            transition.m_next_state.c_str() );
-                    }
-                    continue;
-                }
-
                 std::string state_ref = transition.m_next_state;
                 
                 std::string next_state_fullname = evaluateStateFullNameFromReference( current_path, state_ref );
@@ -245,27 +233,7 @@ namespace hsm
                         const char* event_value = element->Attribute( "event" );
                         const char* next_state_value = element->Attribute( "next_state" );
 
-                        // special transition.
-                        if ( event_value == "_exit" || event_value == "start" || event_value == "_restart" )
-                        {
-                            debug_stream << indent_string << " - transition " << event_value;
-
-                            if ( next_state_value != nullptr )
-                            {
-                                debug_stream << " ----> <" << next_state_value << ">" << std::endl;
-                            }
-                            else
-                            {
-                                debug_stream << std::endl;
-                            }
-
-                            schema::Transition transition;
-                            transition.m_event_name = event_value;
-
-                            state->m_transitions.push_back( transition );
-                        }
-                        // regular transition.
-                        else if ( event_value != nullptr && next_state_value != nullptr )
+                        if ( event_value != nullptr && next_state_value != nullptr )
                         {
                             debug_stream << indent_string << " - transition " << event_value << " ----> <" << next_state_value << ">" << std::endl;
 
@@ -317,9 +285,8 @@ namespace hsm
                     if ( state == nullptr )
                     {
                         new_state.m_fullname = std::string( "\\\\" ) + element->ValueStr();
+                        m_schema.m_initial_state = new_state.m_fullname;
 
-                        m_schema.m_transition_start_state_machine.m_event_name = "_start";
-                        m_schema.m_transition_start_state_machine.m_next_state = new_state.m_fullname;
                     }
                     // child state.
                     else

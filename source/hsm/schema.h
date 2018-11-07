@@ -36,8 +36,7 @@ namespace hsm
         {
             std::string                                             m_filename;
             std::unordered_map<std::string, State>                  m_states;
-            Transition                                              m_transition_start_state_machine;
-            Transition                                              m_transition_stop_state_machine;
+            std::string                                             m_initial_state;
         };
     }
 }

@@ -58,6 +58,7 @@ namespace hsm
         schema::StateMachine    m_schema;           // state machine definition (loaded from xml).
         
         Transition*             m_transition;       // current transition.
+        Transition*             m_restart;          // transition for a restart.
         std::list<Asset*>       m_assetsToLoad;     // assets to load before entering a state.
         std::list<Asset*>       m_assetsToUnload;   // assets to unload before exiting a state.
         std::list<State*>       m_statesToUpdate;   // state stack to update.
