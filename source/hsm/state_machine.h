@@ -26,8 +26,8 @@ namespace hsm
         bool load( const std::string& xml_filename );
         bool isLoaded() const;
                 
-        void start();
-        void restart();
+        void start( std::string& initial_state = std::string() );
+        void restart( std::string& initial_state = std::string() );
         void stop();
 
         bool isStopped() const;

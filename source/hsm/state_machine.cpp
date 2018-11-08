@@ -130,7 +130,7 @@ namespace hsm
     }
 
     // loading the schemas and initialising the states.
-    void StateMachine::start()
+    void StateMachine::start( std::string& initial_state )
     {
         // already started.
         if (isStarted())
@@ -151,17 +151,17 @@ namespace hsm
             delete m_transition;
         m_transition = nullptr;
 
-        schema::Transition start_transition;
-        start_transition.m_next_state = m_schema.m_initial_state;
-        start_transition.m_event_name = "_enter";
+        schema::Transition start_schema;
+        start_schema.m_next_state = initial_state.empty() ? m_schema.m_initial_state : initial_state;
+        start_schema.m_event_name = "_enter";
 
-        m_transition = m_factory->createTransition( start_transition );
+        m_transition = m_factory->createTransition( start_schema );
 
         m_statusString = "STARTING";
     }
 
     // loading the schemas and initialising the states.
-    void StateMachine::restart()
+    void StateMachine::restart( std::string& initial_state )
     {
         if (m_factory == nullptr)
         {
@@ -188,7 +188,7 @@ namespace hsm
 
         // second, cache a new restart transition.
         schema::Transition restart_schema;
-        restart_schema.m_next_state = m_schema.m_initial_state;
+        restart_schema.m_next_state = initial_state.empty() ? m_schema.m_initial_state : initial_state;
         restart_schema.m_event_name = "_enter";
 
         m_restart = m_factory->createTransition( restart_schema );
