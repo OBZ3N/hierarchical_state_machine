@@ -1,5 +1,6 @@
 
 #include "test/test_asset.h"
+#include "hsm/random.h"
 #include <algorithm>
 
 namespace test
@@ -7,8 +8,8 @@ namespace test
     AssetTest::AssetTest( const hsm::schema::Asset& asset_schema )
         : Asset( asset_schema )
     {
-        m_load_completed_time = debug::random<unsigned int>( 100, 2000 );
-        m_unload_completed_time = debug::random<unsigned int>( 10, 200 );
+        m_load_completed_time = utils::random<unsigned int>( 100, 2000 );
+        m_unload_completed_time = utils::random<unsigned int>( 10, 200 );
     }
 
     bool AssetTest::load()

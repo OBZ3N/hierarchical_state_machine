@@ -28,11 +28,11 @@ namespace test
 
     void SimulatedEvent::start()
     {
-        m_time_for_event = debug::randomFloat(m_time_min, m_time_max);
+        m_time_for_event = utils::randomFloat(m_time_min, m_time_max);
 
-        m_probability_for_event = debug::randomFloat(m_probability_min, m_probability_max);
+        m_probability_for_event = utils::randomFloat(m_probability_min, m_probability_max);
 
-        m_probability_roll = debug::randomFloat(0.0f, 1.0f);
+        m_probability_roll = utils::randomFloat(0.0f, 1.0f);
 
         if (!m_timer.isStarted())
         {

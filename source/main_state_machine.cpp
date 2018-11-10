@@ -2,6 +2,8 @@
 #include <windows.h>
 
 #include "hsm/schema.h"
+#include "hsm/timer.h"
+#include "hsm/random.h"
 #include "hsm/asset.h"
 #include "hsm/state.h"
 #include "hsm/state_machine.h"
@@ -42,8 +44,8 @@ struct Runtime
         m_stop_timer.start();
         m_restart_timer.start();
 
-        m_stop_time = debug::randomFloat(0.0f, 100.0f);
-        m_restart_time = debug::randomFloat(0.0f, 100.0f);
+        m_stop_time = utils::randomFloat(0.0f, 100.0f);
+        m_restart_time = utils::randomFloat(0.0f, 100.0f);
     }
 
     bool IsCompleted()
@@ -73,7 +75,7 @@ struct Runtime
         {
             m_stop_counter++;
             m_stop_timer.restart();
-            m_stop_time = debug::randomFloat(0.0f, 600.0f);
+            m_stop_time = utils::randomFloat(0.0f, 600.0f);
             stop_state_machine = true;
         }
     }
@@ -100,7 +102,7 @@ struct Runtime
         {
             m_restart_counter++;
             m_restart_timer.restart();
-            m_restart_time = debug::randomFloat(0.0f, 300.0f);
+            m_restart_time = utils::randomFloat(0.0f, 300.0f);
             restart_state_machine = true;
         }
     }
@@ -111,8 +113,8 @@ struct Runtime
     float m_stop_time;
     float m_restart_time;
  
-    debug::Timer m_stop_timer;
-    debug::Timer m_restart_timer;
+    utils::Timer m_stop_timer;
+    utils::Timer m_restart_timer;
 
     const Settings& m_settings;
 };

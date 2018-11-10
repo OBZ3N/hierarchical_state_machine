@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\hsm\debug.cpp" />
+    <ClCompile Include="..\source\hsm\random.cpp" />
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp" />
+    <ClCompile Include="..\source\hsm\timer.cpp" />
     <ClCompile Include="..\source\main_state_generator.cpp" />
     <ClCompile Include="..\source\test\test_generator.cpp" />
     <ClCompile Include="..\source\test\test_utils.cpp" />
@@ -39,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\hsm\debug.h" />
+    <ClInclude Include="..\source\hsm\random.h" />
     <ClInclude Include="..\source\hsm\schema.h" />
     <ClInclude Include="..\source\hsm\state_machine_xml_loader.h" />
+    <ClInclude Include="..\source\hsm\timer.h" />
     <ClInclude Include="..\source\test\test_generator.h" />
     <ClInclude Include="..\source\test\test_utils.h" />
     <ClInclude Include="..\source\tinyXML\tinystr.h" />

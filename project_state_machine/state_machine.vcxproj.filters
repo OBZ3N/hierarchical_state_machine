@@ -184,6 +184,12 @@
     <ClCompile Include="..\source\test\states\state_flow_race_waitfortrackdatasync.cpp">
       <Filter>Source Files\test\states</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\hsm\timer.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hsm\random.cpp">
+      <Filter>Source Files\hsm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\test\states\state_flow.h">
@@ -350,6 +356,12 @@
     </ClInclude>
     <ClInclude Include="..\source\test\states\state_flow_race_waitfortrackdatasync.h">
       <Filter>Source Files\test\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\timer.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\random.h">
+      <Filter>Source Files\hsm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,8 @@
 
 #include <string>
 #include "hsm/debug.h"
+#include "hsm/timer.h"
+#include "hsm/random.h"
 
 namespace test
 {
@@ -36,6 +38,6 @@ namespace test
         int m_start_count;
         int m_stop_count;
 
-        debug::Timer m_timer;
+        utils::Timer m_timer;
     };
 }

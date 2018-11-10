@@ -19,52 +19,7 @@ namespace debug
         Count
     };
 
-    // pseudo-random functions.
-    extern void randomSeed(unsigned int seed);
-
-    extern float randomFloat();
-
-    extern float randomFloat(float min, float max);
-
-    template<typename type> type random(int a, int b) 
-    { 
-        float rnd = rand() / (float)RAND_MAX;
-        return (type) (a + rnd * (b - a));
-    }
-
-    // millisecond timer / stopwatch.
-    struct Timer
-    {
-    public:
-        Timer(bool start=false);
-
-        void start();
-        void stop();
-        void restart();
-        
-        void pause();
-        void unpause();
-
-        bool isStarted() const { return m_started; }
-        bool isPaused() const { return m_paused; }
-
-        void setStarted(bool value);
-        void setPaused(bool value);
-        
-        uint32_t getElapsedTimeMSecs() const;
-        float getElapsedTimeSecs() const;
-    
-    private:
-        uint32_t m_start_timestamp;
-        uint32_t m_pause_timestamp;
-        uint32_t m_pause_time_accum;
-        
-        bool m_paused;
-        bool m_started;
-    };
-    
     extern void initialise();
-    extern int GetTimeStamp();
     extern const char* LogLevelToString(LogLevel level);
 
     extern std::string formatString( const char* format, va_list args );

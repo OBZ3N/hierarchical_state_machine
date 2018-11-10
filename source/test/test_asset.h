@@ -1,5 +1,6 @@
 
 #include "hsm/asset.h"
+#include "hsm/timer.h"
 #include "hsm/debug.h"
 
 namespace test
@@ -18,8 +19,8 @@ namespace test
         virtual bool isUnloading() const override;
 
     private:
-        debug::Timer m_load_timer;
-        debug::Timer m_unload_timer;
+        utils::Timer m_load_timer;
+        utils::Timer m_unload_timer;
         unsigned int m_load_completed_time;
         unsigned int m_unload_completed_time;
 

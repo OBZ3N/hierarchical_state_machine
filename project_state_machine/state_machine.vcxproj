@@ -120,8 +120,10 @@
   <ItemGroup>
     <ClCompile Include="..\source\hsm\bitfield.cpp" />
     <ClCompile Include="..\source\hsm\debug.cpp" />
+    <ClCompile Include="..\source\hsm\random.cpp" />
     <ClCompile Include="..\source\hsm\state_machine.cpp" />
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp" />
+    <ClCompile Include="..\source\hsm\timer.cpp" />
     <ClCompile Include="..\source\main_state_machine.cpp" />
     <ClCompile Include="..\source\test\states\state_factory_table.cpp" />
     <ClCompile Include="..\source\test\states\state_flow.cpp" />
@@ -176,11 +178,13 @@
     <ClInclude Include="..\source\hsm\asset.h" />
     <ClInclude Include="..\source\hsm\bitfield.h" />
     <ClInclude Include="..\source\hsm\debug.h" />
+    <ClInclude Include="..\source\hsm\random.h" />
     <ClInclude Include="..\source\hsm\schema.h" />
     <ClInclude Include="..\source\hsm\state.h" />
     <ClInclude Include="..\source\hsm\state_machine.h" />
     <ClInclude Include="..\source\hsm\state_machine_factory.h" />
     <ClInclude Include="..\source\hsm\state_machine_xml_loader.h" />
+    <ClInclude Include="..\source\hsm\timer.h" />
     <ClInclude Include="..\source\hsm\transition.h" />
     <ClInclude Include="..\source\test\states\state_flow.h" />
     <ClInclude Include="..\source\test\states\state_flow_attractscreen.h" />

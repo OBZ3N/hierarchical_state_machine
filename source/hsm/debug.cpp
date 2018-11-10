@@ -13,10 +13,17 @@
 #include <time.h>
 #include <windows.h>
 #include <wincon.h>
+
 #include "hsm/debug.h"
+#include "hsm/timer.h"
 
 namespace debug
 {
+    static bool s_initialised = false;
+    static uint32_t s_timestamp_origin = 0;
+    static HANDLE s_hConsole = 0;
+    #define LOG_WIN32_API_CALL(EXP) logWin32ApiCall(#EXP, (EXP) != 0);
+
     std::string formatString( const char* format, va_list args )
     {
         // reliably acquire the size from a copy of
@@ -63,128 +70,6 @@ namespace debug
         return result;
     }
     
-    void randomSeed(unsigned int seed)
-    {
-        srand(seed);
-    }
-
-    extern float randomFloat()
-    {
-        float rnd = rand() / (float)RAND_MAX;
-        return rnd;
-    }
-
-    float randomFloat( float min, float max )
-    {
-        return min + randomFloat() * ( max - min );
-    }
-
-    Timer::Timer(bool start)
-    {
-        m_paused = false;
-        m_started = false;
-        setStarted(start);
-    }
-
-    void Timer::start()
-    {
-        if (!m_started)
-        {
-            m_paused = false;
-            m_started = true;
-            m_pause_time_accum = 0;
-            m_start_timestamp = GetTimeStamp();
-        }
-    }
-
-    void Timer::restart()
-    {
-        if(m_started)
-            stop();
-
-        start();
-    }
-
-    void Timer::stop()
-    {
-        m_started = false;
-        m_paused = false;
-    }
-
-    void Timer::pause()
-    {
-        if (m_started && !m_paused)
-        {
-            m_paused = true;
-            m_pause_time_accum = 0;
-            m_pause_timestamp = GetTimeStamp();
-        }
-    }
-    void Timer::unpause()
-    {
-        if (m_started && m_paused)
-        {
-            m_paused = false;
-            m_pause_time_accum = GetTimeStamp() - m_pause_timestamp;
-        }
-    }
-
-    void Timer::setStarted(bool value)
-    {
-        if (value && !m_started)
-        {
-            start();
-        }
-        else if (!value && m_started)
-        {
-            stop();
-        }
-    }
-
-    void Timer::setPaused(bool value)
-    {
-        if (m_started && value && !m_paused)
-        {
-            pause();
-        }
-        else if (m_started && !value && m_paused)
-        {
-            unpause();
-        }
-    }
-
-    uint32_t Timer::getElapsedTimeMSecs() const
-    {
-        if (!m_started)
-        {
-            return 0;
-        }
-        else
-        {
-            uint32_t current_elapsed_time = (m_paused) ? (m_pause_timestamp - m_start_timestamp) : (GetTimeStamp() - m_start_timestamp);
-
-            //ASSERT_FATAL((current_elapsed_time > m_pause_time_accum), "current_elapsed_time(%u) > m_pause_time_accum(%u).", current_elapsed_time, m_pause_time_accum);
-
-            uint32_t total_elapsed_time = (current_elapsed_time - m_pause_time_accum);
-
-            return total_elapsed_time;
-        }
-    }
-
-    float Timer::getElapsedTimeSecs() const
-    {
-        return getElapsedTimeMSecs() / 1000.0f;
-    }
-}
-
-namespace debug
-{
-    static bool s_initialised = false;
-    static int s_timestamp_origin = 0;
-    static HANDLE s_hConsole = 0;
-
-    #define LOG_WIN32_API_CALL(EXP) logWin32ApiCall(#EXP, (EXP) != 0);
-
     void logWin32ApiCall(const char* call_descriptor, bool call_result)
     {
         if (!call_result)
@@ -199,7 +84,7 @@ namespace debug
             return;
 
         s_initialised = true;
-        s_timestamp_origin = GetTimeStamp();
+        s_timestamp_origin = utils::Timer::getTimeStamp();
 
         s_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -321,14 +206,7 @@ namespace debug
 
         SetConsoleTextAttribute(s_hConsole, attrib);
     }
-
-    int GetTimeStamp()
-    {
-        int ms = GetTickCount();
-
-        return (ms - s_timestamp_origin);
-    }
-
+    
     void assertArgs( bool& skipAssert, bool condition, const char* condition_string, LogLevel level, const char* file, int line, const char* format, ... )
     {
         if ( skipAssert )
@@ -368,11 +246,11 @@ namespace debug
         SetTextAttribute( level );
 
         // timestamp column
-        int timestamp = GetTimeStamp();
-        int ms = GetTimeStamp() % 1000;
-        int sec = (GetTimeStamp() / 1000) % 60;
-        int min = (GetTimeStamp() / 60000) % 60;
-        int hour = (GetTimeStamp() / 3600000) % 24;
+        int timestamp = utils::Timer::getTimeStamp();
+        int ms = timestamp % 1000;
+        int sec = ( timestamp / 1000) % 60;
+        int min = ( timestamp / 60000) % 60;
+        int hour = ( timestamp / 3600000) % 24;
 
         std::string message_string = formatString( format, args );
 
