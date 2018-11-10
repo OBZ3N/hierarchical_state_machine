@@ -51,21 +51,21 @@ namespace hsm
         void logDebug( debug::LogLevel level, const char* format, ... ) const;
 
         // members.
-        StateMachineFactory*    m_factory;          // create components (asset, state, transition...).
-        schema::StateMachine    m_schema;           // state machine definition (loaded from xml).
+        StateMachineFactory*        m_factory;          // create components (asset, state, transition...).
+        const schema::StateMachine& m_schema;           // state machine definition (loaded from xml).
         
-        Transition*             m_transition;       // current transition.
-        Transition*             m_restart;          // transition for a restart.
-        std::list<Asset*>       m_assetsToLoad;     // assets to load before entering a state.
-        std::list<Asset*>       m_assetsToUnload;   // assets to unload before exiting a state.
-        std::list<State*>       m_statesToUpdate;   // state stack to update.
+        Transition*                 m_transition;       // current transition.
+        Transition*                 m_restart;          // transition for a restart.
+        std::list<Asset*>           m_assetsToLoad;     // assets to load before entering a state.
+        std::list<Asset*>           m_assetsToUnload;   // assets to unload before exiting a state.
+        std::list<State*>           m_statesToUpdate;   // state stack to update.
 
-        std::string             m_statusString;     // status of the state machine (debugging).
+        std::string                 m_statusString;     // status of the state machine (debugging).
 
         // lookup table utils.
         // the state bitname is a bitfield representation, of the location of the state within the hierarchy. 
         // This is unique to each state, and can be use to accelerate transition evaluations (what state to push, pop, ect... to reach the desired state).
-        std::vector<schema::State*> calculateSubStates( const schema::State* parent );
+        std::vector<const schema::State*> calculateSubStates( const schema::State* parent );
         void calculateLookupKey( const Bitfield& bitfield, const schema::State* state );
         bool calculateLookupTable();
 

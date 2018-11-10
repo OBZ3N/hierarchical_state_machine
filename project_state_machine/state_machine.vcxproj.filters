@@ -103,48 +103,6 @@
     <ClCompile Include="..\source\test\states\state_flow_checkinvite.cpp">
       <Filter>Source Files\test\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_createsession.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_campaignmenu.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_mainmenu.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_createsession.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_findsession.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_joinsession.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_lobby.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayer_lobby_waitforplayers.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_multiplayermenu.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_frontend_optionsmenu.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_joininvite.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_joinsession.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\test\states\state_flow_race.cpp">
       <Filter>Source Files\test\states</Filter>
     </ClCompile>
@@ -274,48 +232,6 @@
       <Filter>Source Files\test\states</Filter>
     </ClInclude>
     <ClInclude Include="..\source\test\states\state_flow_checkinvite.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_createsession.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_campaignmenu.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_mainmenu.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_createsession.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_findsession.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_joinsession.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_lobby.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayer_lobby_waitforplayers.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_multiplayermenu.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_frontend_optionsmenu.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_joininvite.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_joinsession.h">
       <Filter>Source Files\test\states</Filter>
     </ClInclude>
     <ClInclude Include="..\source\test\states\state_flow_race.h">

@@ -24,11 +24,11 @@ namespace test
         {
             if ( m_game.m_interrupt_manager->isRaised( "invite_accepted" ) )
             {
-                return "join_invite";
+                return "multiplayer";
             }
             else
             {
-                return "go_to_main_menu";
+                return "front_end";
             }
         }
 

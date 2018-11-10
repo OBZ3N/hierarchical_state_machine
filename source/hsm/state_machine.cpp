@@ -56,8 +56,6 @@ namespace hsm
     {
         m_statusString = "SHUTTING_DOWN";
 
-        m_schema = schema::StateMachine();
-
         for (auto asset : m_assetsToLoad)
             delete asset;
 
@@ -645,9 +643,9 @@ namespace hsm
     }
 
     // calculate the list of child states for a given state.
-    std::vector<schema::State*> StateMachine::calculateSubStates(const schema::State* parent)
+    std::vector<const schema::State*> StateMachine::calculateSubStates(const schema::State* parent)
     {
-        std::vector<schema::State*> sub_states;
+        std::vector<const schema::State*> sub_states;
 
         std::string parent_name = parent->m_fullname;
 
@@ -677,7 +675,7 @@ namespace hsm
     void StateMachine::calculateLookupKey( const Bitfield& bitfield, const schema::State* state )
     {
         // find sub-states.
-        std::vector<schema::State*> subStates = calculateSubStates( state );
+        std::vector<const schema::State*> subStates = calculateSubStates( state );
 
         // calculate child states bitfields.
         std::vector<Bitfield> subStateBitfields;
@@ -721,7 +719,7 @@ namespace hsm
             return false;
         }
 
-        schema::State* root = &(it->second);
+        const schema::State* root = &(it->second);
 
         // root bitfield.
         Bitfield bitfield;

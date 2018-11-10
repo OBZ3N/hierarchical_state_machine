@@ -28,7 +28,7 @@ namespace test
         {
             if ( m_game.m_interrupt_manager->isRaised( "invite_accepted" ) )
             {
-                return "join_invite";
+                return "invite_accepted";
             }
 
             std::string event = m_simul_attract_cancelled.update();

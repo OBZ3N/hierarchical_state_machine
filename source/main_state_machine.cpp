@@ -119,15 +119,16 @@ struct Runtime
     const Settings& m_settings;
 };
 
+Settings settings;
+test::Game the_game;
+hsm::StateMachineXmlLoader state_machine_loader;
+hsm::schema::StateMachine state_machine_schema;
+
 void main()
 {
-    Settings settings;
     
     // the game environment.
-    test::Game the_game;
     the_game.initialise();
-
-    hsm::StateMachineXmlLoader state_machine_loader;
 
     if ( !state_machine_loader.load( settings.m_state_machine_input_xml ) )
     {
@@ -136,11 +137,14 @@ void main()
         exit( -1 );
     }
 
+    // copy the loaded schema.
+    state_machine_schema = state_machine_loader.getSchema();
+
     // the factory that will instantiate states for the state machine.
-    test::StateMachineFactory state_machine_factory( state_machine_loader.getSchema(), the_game );
+    test::StateMachineFactory state_machine_factory( state_machine_schema, the_game );
     
     // the state machine.
-    hsm::StateMachine state_machine( state_machine_loader.getSchema(), &state_machine_factory );
+    hsm::StateMachine state_machine( state_machine_schema, &state_machine_factory );
 
     Runtime runtime(settings);
     runtime.Start();

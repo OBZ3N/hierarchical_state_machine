@@ -23,82 +23,51 @@
   </AttractScreen>
 
   <CheckInvite>
-    <transition event="join_invite" next_state="JoinInvite" />
-    <transition event="go_to_main_menu" next_state="FrontEnd/MainMenu" />
+    <transition event="multiplayer" next_state="FrontEnd/Multiplayer" />
+    <transition event="front_end" next_state="FrontEnd" />
   </CheckInvite>
-
-  <JoinInvite>
-    <transition event="create_session" next_state="CreateSession" />
-    <transition event="JoinSession" next_state="JoinSession" />
-  </JoinInvite>
-
-  <CreateSession>
-    <transition event="session_created" next_state="FrontEnd/Multiplayer/Lobby" />
-    <transition event="session_create_failed" next_state="PressStartScreen" />
-  </CreateSession>
-
-  <JoinSession>
-    <transition event="joined_session" next_state="FrontEnd/Multiplayer/Lobby" />
-    <transition event="joine_session_failed" next_state="PressStartScreen" />
-  </JoinSession>
  
   <FrontEnd>
     <asset id="ui_front_end" />
-    <transition event="signed_out" next_state="PressStartScreen"/>
-    <transition event="signed_in" next_state="PressStartScreen"/>
-    <transition event="invite_accepted" next_state="JoinInvite"/>
+    <transition event="signed_out" next_state="../PressStartScreen"/>
+    <transition event="signed_in" next_state="../PressStartScreen"/>
+    <transition event="invite_accepted" next_state="../CheckInvite"/>
     
-    <MainMenu>
-      <asset id="ui_main_menu"/>
-      <transition event="go_to_multiplayer_menu" next_state="MultiplayerMenu"/>
-      <transition event="go_to_campaign_menu" next_state="CampaignMenu"/>
-      <transition event="go_to_options_menu" next_state="OptionsMenu"/>
-    </MainMenu>
-
-    <CampaignMenu>
+    <SinglePlayer>
+      <transition event="back" next_state=".." />
       <transition event="start_race" next_state="//Flow/Race/Loading" />
-      <transition event="go_to_main_menu" next_state="MainMenu" />
-    </CampaignMenu>
-
-    <OptionsMenu>
-      <transition event="go_to_main_menu" next_state="MainMenu" />
-    </OptionsMenu>
-
-    <MultiplayerMenu>
-      <asset id="ui_multiplayer_menu"/>
-      <transition event="go_to_main_menu" next_state="MainMenu" />
-      <transition event="network_cable_disconnected" next_state="MainMenu"/>
-      <transition event="create_custom_match" next_state="Multiplayer/CreateSession"/>
-      <transition event="find_custom_match" next_state="Multiplayer/FindSession"/>
-      <transition event="find_quickmatch" next_state="Multiplayer/FindSession"/>
-      <transition event="find_ranked_match" next_state="Multiplayer/FindSession"/>
-    </MultiplayerMenu>
+    </SinglePlayer>
 
     <Multiplayer>
-      <transition event="network_cable_disconnected" next_state="MainMenu"/>
-      <transition event="network_services_disconnected" next_state="MainMenu"/>
+      <transition event="back" next_state=".." />
+      <transition event="network_cable_disconnected" next_state=".."/>
+      <transition event="network_services_disconnected" next_state=".."/>
+      <transition event="create_session" next_state="./CreateSession"/>
+      <transition event="join_session" next_state="./JoinSession"/>
+      <transition event="find_session" next_state="./FindSession"/>
 
       <FindSession>
+        <transition event="back" next_state=".." />
         <transition event="session_found" next_state="JoinSession" />
-        <transition event="session_search_cancelled" next_state="../MultiplayerMenu" />
       </FindSession>
 
       <CreateSession>
+        <transition event="back" next_state=".." />
         <transition event="session_created" next_state="Lobby/WaitForPlayers" />
-        <transition event="session_create_failed" next_state="../MultiplayerMenu" />
       </CreateSession>
 
       <JoinSession>
+        <transition event="back" next_state=".." />
         <transition event="session_joined" next_state="Lobby" />
-        <transition event="session_join_failed" next_state="../MultiplayerMenu" />
       </JoinSession>
 
       <Lobby>
         <asset id="ui_multiplayer_lobby"/>
-        <transition event="session_closed" next_state="../MultiplayerMenu" />
+        <transition event="back" next_state=".." />
+        <transition event="session_closed" next_state=".." />
         
         <WaitForPlayers>
-          <transition event="all_players_ready" next_state="//Flow/Race/Loading" />
+          <transition event="ready" next_state="//Flow/Race/Loading" />
         </WaitForPlayers>
       
       </Lobby>

@@ -29,6 +29,6 @@ namespace test
 
         test::Game& m_game;
 
-        hsm::schema::StateMachine m_schema;
+        const hsm::schema::StateMachine& m_schema;
     };
 }
