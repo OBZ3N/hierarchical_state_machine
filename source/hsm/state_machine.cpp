@@ -9,26 +9,26 @@
 #include "TinyXML/tinyxml.h"
 #include "hsm/state_machine.h"
 #include "hsm/state_machine_factory.h"
-#include "hsm/state_machine_xml_loader.h"
 
 namespace hsm
 {
-    StateMachine::StateMachine()
-        : m_factory(nullptr)
+    StateMachine::StateMachine( const schema::StateMachine& schema, StateMachineFactory* factory )
+        : m_schema( schema )
+        , m_factory( factory )
+        , m_transition ( nullptr )
+        , m_restart( nullptr )
     {
-        m_statusString = "NULL";
-        m_transition = nullptr;
-        m_restart = nullptr;
+        if ( !calculateLookupTable() )
+        {
+            ASSERT_FATAL( false, "failed to build bitname lookup table." );
+        }
+
+        m_statusString = "CONSTRUCTED";
     }
 
     StateMachine::~StateMachine()
     {
         shutdown();
-    }
-
-    void StateMachine::setFactory(StateMachineFactory* factory)
-    {
-        m_factory = factory;
     }
 
     void StateMachine::logDebug(debug::LogLevel level, const char* format, ...) const
@@ -40,22 +40,15 @@ namespace hsm
 
         std::ostringstream stream;
 
-        if (!isLoaded())
+        if (m_statesToUpdate.empty())
         {
             stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " " << message;
         }
         else
         {
-            if (m_statesToUpdate.empty())
-            {
-                stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " " << message;
-            }
-            else
-            {
-                stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " <" << m_statesToUpdate.front()->getSchema().m_fullname << "> " << message;
-            }
+            stream << "[FSM] " << std::left << std::setfill(' ') << std::setw(16) << m_statusString << " <" << m_statesToUpdate.front()->getSchema().m_fullname << "> " << message;
         }
-
+        
         debug::logDebug(level, stream.str().c_str());
     }
 
@@ -87,46 +80,6 @@ namespace hsm
         m_statusString = "SHUTDOWN";
 
         logDebug(debug::LogLevel::Trace, "Shutdown.");
-    }
-
-    bool StateMachine::load(const std::string& xml_filename)
-    {
-        logDebug(debug::LogLevel::Info, "loading '%s'...", xml_filename.c_str());
-
-        m_statusString = "LOADING";
-
-        StateMachineXmlLoader loader;
-
-        if (!loader.load(xml_filename))
-        {
-            logDebug(debug::LogLevel::Error, "schema '%s' failed to load.", xml_filename.c_str());
-
-            m_statusString = "LOADING FAILED";
-
-            return false;
-        }
-
-        m_schema = loader.getSchema();
-
-        if (!calculateLookupTable())
-        {
-            logDebug(debug::LogLevel::Error, "failed to build lookup table.");
-
-            m_statusString = "LOADING FAILED";
-
-            return false;
-        }
-
-        m_statusString = "LOADED";
-
-        logDebug(debug::LogLevel::Info, "schema '%s' loaded.", xml_filename.c_str());
-
-        return true;
-    }
-
-    bool StateMachine::isLoaded() const
-    {
-        return !m_schema.m_states.empty();
     }
 
     // loading the schemas and initialising the states.

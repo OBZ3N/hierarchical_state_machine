@@ -123,17 +123,24 @@ void main()
 {
     Settings settings;
     
-    // the state machine.
-    hsm::StateMachine state_machine;
-    state_machine.load(settings.m_state_machine_input_xml);
-
     // the game environment.
     test::Game the_game;
     the_game.initialise();
 
+    hsm::StateMachineXmlLoader state_machine_loader;
+
+    if ( !state_machine_loader.load( settings.m_state_machine_input_xml ) )
+    {
+        debug::logFatal( "schema '%s' failed to load.", settings.m_state_machine_input_xml.c_str() );
+
+        exit( -1 );
+    }
+
     // the factory that will instantiate states for the state machine.
-    test::StateMachineFactory state_machine_factory(state_machine.getSchema(), the_game );
-    state_machine.setFactory(&state_machine_factory);
+    test::StateMachineFactory state_machine_factory( state_machine_loader.getSchema(), the_game );
+    
+    // the state machine.
+    hsm::StateMachine state_machine( state_machine_loader.getSchema(), &state_machine_factory );
 
     Runtime runtime(settings);
     runtime.Start();

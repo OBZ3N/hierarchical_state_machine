@@ -20,12 +20,9 @@ namespace hsm
     class StateMachine
     {
     public:
-        StateMachine( );
+        StateMachine( const schema::StateMachine& schema, StateMachineFactory* factory );
         ~StateMachine();
 
-        bool load( const std::string& xml_filename );
-        bool isLoaded() const;
-                
         void start( std::string& initial_state = std::string() );
         void restart( std::string& initial_state = std::string() );
         void stop();
@@ -36,7 +33,7 @@ namespace hsm
         void update();
         void shutdown();
 
-        void setFactory(StateMachineFactory* factory);
+        StateMachineFactory* getFactory() { return m_factory; }
         const schema::StateMachine& getSchema() const { return m_schema; }
 
     private:
