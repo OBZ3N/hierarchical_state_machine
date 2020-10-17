@@ -593,12 +593,16 @@ namespace hsm
             m_start = schema::Transition();
             m_transition = schema::Transition();
             m_exceptions.clear();
+
+            m_statusString = "STOPPED";
         }
         else
         {
             if (m_start.m_state == state_schema->m_fullname)
             {
                 m_start = schema::Transition();
+
+                m_statusString = "UPDATING";
             }
 
             if (m_transition.m_state == state_schema->m_fullname)

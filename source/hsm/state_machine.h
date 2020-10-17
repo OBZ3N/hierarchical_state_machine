@@ -44,6 +44,8 @@ namespace hsm
         std::list<const Resource*> getCurrentResources() const;
         std::list<const schema::Transition*> getCurrentExceptions() const;
         const schema::Transition* getCurrentTransition() const;
+
+        const std::string& getStatusString() const { return m_statusString; }
         
     private:
         void updateStatus_LoadResources();

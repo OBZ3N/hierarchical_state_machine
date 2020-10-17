@@ -26,7 +26,7 @@
 #pragma comment (lib, "sdl2main.lib")
 
 #define SCREEN_WIDTH            800
-#define SCREEN_HEIGHT           600
+#define SCREEN_HEIGHT           800
 #define OPENGL_MAJOR_VERSION    2
 #define OPENGL_MINOR_VERSION    1
 #define OPENGL_PROFILE          SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE
@@ -202,6 +202,7 @@ void ImGuiHSMState::render() const
             ImGui::SameLine();
             if (ImGui::Button(it.m_event.c_str()))
             {
+                updateTimer.restart();
                 state_machine->setTransition(*this, it.m_event, it.m_attributes);
             }
         }
@@ -223,6 +224,7 @@ void ImGuiHSMState::renderTransitions() const
 
                 if (ImGui::Button(it.m_event.c_str()))
                 {
+                    updateTimer.restart();
                     state_machine->setTransition(*this, it.m_event, it.m_attributes);
                 }
 
@@ -284,6 +286,8 @@ public:
 class ImGuiHSMachine : public hsm::StateMachine
 {
 public:
+    hsm::schema::Transition m_transition;
+
     ImGuiHSMachine(const hsm::schema::StateMachine& schema, hsm::StateMachineFactory* factory)
         : hsm::StateMachine(schema, factory)
     {
@@ -370,10 +374,14 @@ public:
 
         if (transition)
         {
-            ImGui::Text("Transition :");
-            ImGui::SameLine();
-            ImGui::Text(transition->m_state.c_str());
+            m_transition = *transition;
         }
+
+        bool transitionActive = (transition != nullptr) && (transition->m_state == m_transition.m_state);
+
+        ImGui::Text("Transition :");
+        ImGui::SameLine();
+        ImGui::TextColored(transitionActive? ImGui::GetStyle().Colors[ImGuiCol_Text] : ImGui::GetStyle().Colors[ImGuiCol_TextDisabled], m_transition.m_state.c_str());
 
         std::list<const hsm::State*> states = getCurrentStates();
 
@@ -390,6 +398,7 @@ public:
 
                 if (ImGui::Button((*it).m_event.c_str()))
                 {
+                    updateTimer.restart();
                     setTransition(*state, (*it).m_event, (*it).m_attributes);
                 }
                 
@@ -527,23 +536,37 @@ void Update()
 
 void Render()
 {
-    if (state_machine->isStopped())
+    if (ImGui::Begin("StateMachine", nullptr, ImGuiWindowFlags_NoDecoration))
     {
-        if (ImGui::Button("Start"))
-        {
-            state_machine->start();
-        }
-    }
+        ImGui::SetWindowSize(ImVec2(SCREEN_WIDTH-4, SCREEN_HEIGHT-4));
+        ImGui::SetWindowPos(ImVec2(2, 2));
 
-    if (state_machine->isStarted())
-    {
-        if (ImGui::Button("Stop"))
+        if (state_machine->isStopped())
         {
-            state_machine->stop();
+            if (ImGui::Button("Start"))
+            {
+                updateTimer.restart();
+                state_machine->start();
+            }
         }
-    }
 
-    ((ImGuiHSMachine*)state_machine)->render();
+        if (state_machine->isStarted())
+        {
+            if (ImGui::Button("Stop"))
+            {
+                updateTimer.restart();
+                state_machine->stop();
+            }
+        }
+
+        ImGui::Text("State :");
+        ImGui::SameLine();
+        ImGui::Text(state_machine->getStatusString().c_str());
+
+        ((ImGuiHSMachine*)state_machine)->render();
+
+        ImGui::End();
+    }
 }
 
 int main (int ArgCount, char **Args)
