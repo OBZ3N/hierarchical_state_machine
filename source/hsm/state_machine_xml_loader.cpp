@@ -348,7 +348,17 @@ namespace hsm
                                 resource.m_attributes[ attr->NameTStr() ] = attr->ValueStr();
                             }
                             debug_stream << "." << std::endl;
-                            state->m_resources.push_back(resource);
+
+
+                            auto it = std::find_if(state->m_resources.begin(), state->m_resources.end(), [&resource](const schema::Resource& res)
+                            {
+                                return resource.m_name == res.m_name;
+                            });
+
+                            if (it == state->m_resources.end())
+                            {
+                                state->m_resources.push_back(resource);
+                            }
                         }
                         else if (resources_name != nullptr)
                         {
@@ -364,7 +374,16 @@ namespace hsm
                             {
                                 schema::Resource resource;
                                 resource.m_name = trim(token);
-                                state->m_resources.push_back(resource);
+
+                                auto it = std::find_if(state->m_resources.begin(), state->m_resources.end(), [&resource](const schema::Resource& res)
+                                {
+                                    return resource.m_name == res.m_name;
+                                });
+
+                                if (it == state->m_resources.end())
+                                {
+                                    state->m_resources.push_back(resource);
+                                }
                             }
                         }
                     }

@@ -262,6 +262,7 @@ namespace hsm
                     {
                         // transition found.
                         m_exceptions.push_back(exception_schema);
+                        m_transition = schema::Transition();
                         break;
                     }
                 }
