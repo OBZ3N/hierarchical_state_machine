@@ -24,8 +24,6 @@
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp" />
     <ClCompile Include="..\source\hsm\timer.cpp" />
     <ClCompile Include="..\source\main_state_generator.cpp" />
-    <ClCompile Include="..\source\test\test_generator.cpp" />
-    <ClCompile Include="..\source\test\test_utils.cpp" />
     <ClCompile Include="..\source\tinyXML\tinystr.cpp" />
     <ClCompile Include="..\source\tinyXML\tinyxml.cpp" />
     <ClCompile Include="..\source\tinyXML\tinyxmlerror.cpp" />
@@ -37,18 +35,16 @@
     <None Include="..\templates\state_factory_table.cpp.template" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\xmls\state_machine.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\source\hsm\debug.h" />
     <ClInclude Include="..\source\hsm\random.h" />
     <ClInclude Include="..\source\hsm\schema.h" />
     <ClInclude Include="..\source\hsm\state_machine_xml_loader.h" />
     <ClInclude Include="..\source\hsm\timer.h" />
-    <ClInclude Include="..\source\test\test_generator.h" />
-    <ClInclude Include="..\source\test\test_utils.h" />
     <ClInclude Include="..\source\tinyXML\tinystr.h" />
     <ClInclude Include="..\source\tinyXML\tinyxml.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\xmls\state_machine_ovr_hierarchical.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

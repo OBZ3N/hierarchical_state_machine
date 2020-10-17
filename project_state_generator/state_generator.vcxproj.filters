@@ -14,9 +14,6 @@
     <Filter Include="Source Files\tinyXML">
       <UniqueIdentifier>{60d4cee2-2d2f-4f4e-a61f-dfeadd4de10c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\test">
-      <UniqueIdentifier>{1fc50470-5299-4ca7-90d0-3d3ae3309662}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\hsm">
       <UniqueIdentifier>{71736b62-80cd-47aa-8967-363dbe5b4488}</UniqueIdentifier>
     </Filter>
@@ -36,12 +33,6 @@
     </ClCompile>
     <ClCompile Include="..\source\tinyXML\tinyxmlparser.cpp">
       <Filter>Source Files\tinyXML</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_generator.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_utils.cpp">
-      <Filter>Source Files\test</Filter>
     </ClCompile>
     <ClCompile Include="..\source\hsm\debug.cpp">
       <Filter>Source Files\hsm</Filter>
@@ -68,22 +59,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\xmls\state_machine.xml">
-      <Filter>Source Files\xmls</Filter>
-    </Xml>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\source\tinyXML\tinystr.h">
       <Filter>Source Files\tinyXML</Filter>
     </ClInclude>
     <ClInclude Include="..\source\tinyXML\tinyxml.h">
       <Filter>Source Files\tinyXML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_generator.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_utils.h">
-      <Filter>Source Files\test</Filter>
     </ClInclude>
     <ClInclude Include="..\source\hsm\debug.h">
       <Filter>Source Files\hsm</Filter>
@@ -100,5 +80,10 @@
     <ClInclude Include="..\source\hsm\timer.h">
       <Filter>Source Files\hsm</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\xmls\state_machine_ovr_hierarchical.xml">
+      <Filter>Source Files\xmls</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

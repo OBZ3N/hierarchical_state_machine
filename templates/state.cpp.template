@@ -9,8 +9,8 @@ namespace test
 {
     namespace states
     {
-        [#template.state.type]::[#template.state.type]( const hsm::schema::State& schema, test::Game& game )
-            : test::StateBase( schema, game )
+        [#template.state.type]::[#template.state.type]( StateMachine* state_machine, const hsm::schema::State& schema, test::Game& game )
+            : test::StateBase( state_machine, schema, game )
         {}
         
         [#template.state.type]::~[#template.state.type]()
@@ -21,9 +21,9 @@ namespace test
              debug::logWarning("[TEST] [TODO] IMPLEMENT ME ('%s').", "[#template.state.type]");
         }
 
-        std::string [#template.state.type]::update()
+        void [#template.state.type]::update()
         {
-            return std::string();
+
         }
 
         void [#template.state.type]::exit()

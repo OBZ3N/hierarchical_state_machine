@@ -21,11 +21,11 @@ namespace test
             static [#template.state.type]* Instantiate(const hsm::schema::State& schema, test::Game& game ) { return new [#template.state.type]( schema, game ); }
 
         public:
-            [#template.state.type](const hsm::schema::State& schema, test::Game& game);
+            [#template.state.type](StateMachine* state_machine, const hsm::schema::State& schema, test::Game& game);
             ~[#template.state.type]();
 
             virtual void enter() override;
-            virtual std::string update() override;
+            virtual void update() override;
             virtual void exit() override;
 
         private:

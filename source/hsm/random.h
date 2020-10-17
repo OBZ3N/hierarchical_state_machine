@@ -10,7 +10,7 @@ namespace utils
 
     extern float randomFloat( float min, float max );
 
-    template<typename type> type random( int a, int b )
+    template<typename type> type random( type a, type b )
     {
         float rnd = rand() / (float)RAND_MAX;
         return (type)( a + rnd * ( b - a ) );

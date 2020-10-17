@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -73,7 +73,9 @@
     <IncludePath>$(ProjectDir)\source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\Source;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Source\sdl\include;$(ProjectDir)..\Source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\Source\sdl\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <ExecutablePath>$(ProjectDir)..\Source\sdl\bin;$(VC_ExecutablePath_x64);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(FxCopDir);$(PATH);</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)/Source;$(IncludePath)</IncludePath>
@@ -111,6 +113,11 @@
     <ClCompile>
       <PreprocessorDefinitions>TIXML_USE_STL</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -124,36 +131,13 @@
     <ClCompile Include="..\source\hsm\state_machine.cpp" />
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp" />
     <ClCompile Include="..\source\hsm\timer.cpp" />
+    <ClCompile Include="..\source\imgui\imgui.cpp" />
+    <ClCompile Include="..\source\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\source\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\source\imgui\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="..\source\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="..\source\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\source\main_state_machine.cpp" />
-    <ClCompile Include="..\source\test\states\state_factory_table.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_attractscreen.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_checkinvite.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_pressstartscreen.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_loading.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_postunloading.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_racing.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_unloading.cpp" />
-    <ClCompile Include="..\source\test\states\state_flow_race_waitfortrackdatasync.cpp" />
-    <ClCompile Include="..\source\test\test_asset.cpp" />
-    <ClCompile Include="..\source\test\test_factory.cpp" />
-    <ClCompile Include="..\source\test\test_game.cpp" />
-    <ClCompile Include="..\source\test\test_generator.cpp" />
-    <ClCompile Include="..\source\test\test_interrupts.cpp" />
-    <ClCompile Include="..\source\test\test_simulated_event.cpp" />
-    <ClCompile Include="..\source\test\test_simulated_invites.cpp" />
-    <ClCompile Include="..\source\test\test_simulated_network.cpp" />
-    <ClCompile Include="..\source\test\test_simulated_online_services.cpp" />
-    <ClCompile Include="..\source\test\test_simulated_session.cpp" />
-    <ClCompile Include="..\source\test\test_state_base.cpp" />
     <ClCompile Include="..\source\test\test_utils.cpp" />
     <ClCompile Include="..\source\tinyXML\tinystr.cpp" />
     <ClCompile Include="..\source\tinyXML\tinyxml.cpp" />
@@ -161,7 +145,7 @@
     <ClCompile Include="..\source\tinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\hsm\asset.h" />
+    <ClInclude Include="..\source\hsm\resource.h" />
     <ClInclude Include="..\source\hsm\bitfield.h" />
     <ClInclude Include="..\source\hsm\debug.h" />
     <ClInclude Include="..\source\hsm\random.h" />
@@ -171,36 +155,86 @@
     <ClInclude Include="..\source\hsm\state_machine_factory.h" />
     <ClInclude Include="..\source\hsm\state_machine_xml_loader.h" />
     <ClInclude Include="..\source\hsm\timer.h" />
-    <ClInclude Include="..\source\hsm\transition.h" />
-    <ClInclude Include="..\source\test\states\state_flow.h" />
-    <ClInclude Include="..\source\test\states\state_flow_attractscreen.h" />
-    <ClInclude Include="..\source\test\states\state_flow_checkinvite.h" />
-    <ClInclude Include="..\source\test\states\state_flow_pressstartscreen.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_loading.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_postunloading.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_racing.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_unloading.h" />
-    <ClInclude Include="..\source\test\states\state_flow_race_waitfortrackdatasync.h" />
-    <ClInclude Include="..\source\test\test_asset.h" />
-    <ClInclude Include="..\source\test\test_factory.h" />
-    <ClInclude Include="..\source\test\test_game.h" />
-    <ClInclude Include="..\source\test\test_generator.h" />
-    <ClInclude Include="..\source\test\test_interrupts.h" />
-    <ClInclude Include="..\source\test\test_schema.h" />
-    <ClInclude Include="..\source\test\test_simulated_event.h" />
-    <ClInclude Include="..\source\test\test_simulated_invites.h" />
-    <ClInclude Include="..\source\test\test_simulated_network.h" />
-    <ClInclude Include="..\source\test\test_simulated_online_services.h" />
-    <ClInclude Include="..\source\test\test_simulated_session.h" />
-    <ClInclude Include="..\source\test\test_state_base.h" />
+    <ClInclude Include="..\source\imgui\imconfig.h" />
+    <ClInclude Include="..\source\imgui\imgui.h" />
+    <ClInclude Include="..\source\imgui\imgui_impl_opengl2.h" />
+    <ClInclude Include="..\source\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="..\source\imgui\imgui_internal.h" />
+    <ClInclude Include="..\source\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\source\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\source\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\source\sdl\include\begin_code.h" />
+    <ClInclude Include="..\source\sdl\include\close_code.h" />
+    <ClInclude Include="..\source\sdl\include\SDL.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_assert.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_atomic.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_audio.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_bits.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_blendmode.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_clipboard.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_android.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_iphoneos.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_macosx.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_minimal.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_pandora.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_psp.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_windows.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_config_wiz.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_copying.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_cpuinfo.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_endian.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_error.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_events.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_gamecontroller.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_gesture.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_haptic.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_hints.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_joystick.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_keyboard.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_keycode.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_loadso.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_log.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_main.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_messagebox.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_mouse.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_mutex.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_name.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_opengl.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_opengles.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_opengles2.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_pixels.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_platform.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_power.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_quit.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_rect.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_render.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_revision.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_rwops.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_scancode.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_shape.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_stdinc.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_surface.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_system.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_syswm.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_assert.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_common.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_compare.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_crc32.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_font.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_fuzzer.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_harness.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_images.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_log.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_md5.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_test_random.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_thread.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_timer.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_touch.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_types.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_version.h" />
+    <ClInclude Include="..\source\sdl\include\SDL_video.h" />
     <ClInclude Include="..\source\test\test_utils.h" />
     <ClInclude Include="..\source\tinyXML\tinystr.h" />
     <ClInclude Include="..\source\tinyXML\tinyxml.h" />
@@ -211,9 +245,7 @@
     <None Include="..\templates\state_factory_table.cpp.template" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\xmls\state_machine.xml">
-      <SubType>Designer</SubType>
-    </Xml>
+    <Xml Include="..\xmls\state_machine_ovr_hierarchical.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,7 +21,7 @@ public:
     std::size_t gethash() const;
 
     bool operator == ( const Bitfield& rhs ) const;
-    bool operator != ( const Bitfield& rhs ) const { return ( ( *this ) == rhs ); }
+    bool operator != ( const Bitfield& rhs ) const { return !( ( *this ) == rhs ); }
 
     Bitfield& operator = ( const Bitfield& rhs );
     Bitfield& operator &= ( const Bitfield& rhs );

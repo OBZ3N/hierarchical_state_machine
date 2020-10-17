@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+
+<Flow>
+  <FlowSettings>
+    <CppFileName>{Workspace}/source/states/flow_state_{Shortname}.cpp</CppFileName>
+    <HeaderFileName>{Workspace}/source/states/flow_state_{Shortname}.h</HeaderFileName>
+  </FlowSettings>
+
+  <Resource id="system">
+    <resource ids="gear, eal, memtracker, debug, bloomberg, ovrnet, ovronline, invite_manager, kino, ui, save_manager, scimitar, ovr"/>
+  </Resource>
+
+  <Resource id="social">
+    <resource ids="matchmaker, party_session, voice_chat_session"/>
+  </Resource>
+
+  <Resource id="front_end">
+    <resource ids="frontend_world, frontend_ui, social"/>
+  </Resource>
+
+  <ExceptionHandler name="default">
+    <catch_exception name="matchmaking_error"/>
+    <catch_exception name="party_session_error"/>
+    <catch_exception name="squad_session_error"                     state="MainMenu"/>
+    <catch_exception name="game_session_error" game_mode="coop"     state="MainMenu"/>
+    <catch_exception name="game_session_error" game_mode="warzone"  state="SquadLobby"/>
+    <catch_exception name="save_data_error"                         state="PressStartScreen"/>
+    <catch_exception name="network_cable_disconnect"                state="PressStartScreen"/>
+    <catch_exception name="online_service_disconnect"               state="PressStartScreen"/>
+    <catch_exception name="system_suspend"                          state="PressStartScreen"/>
+    <catch_exception name="sign_out"                                state="PressStartScreen"/>
+    <catch_exception name="signin_changed"                          state="PressStartScreen"/>
+    <catch_exception name="invite_accepted"                         state="CheckInvite" />
+    <catch_exception name="fatal_error"                             state="//"/>
+    <catch_exception name="*"                                       state="//"/>
+  </ExceptionHandler>
+
+  <Startup>
+    <resource ids="system"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="next" state="PressStartScreen"/>
+  </Startup>
+
+  <PressStartScreen>
+    <resource ids="system"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="next" state="CheckInvite"/>
+  </PressStartScreen>
+
+  <CheckInvite>
+    <resource ids="system"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="start_campaign"      state="LoadGameWorld"/>
+    <transition event="join_coop"           state="JoinGameSession"/>
+    <transition event="create_coop"         state="LoadGameWorld"/>
+    <transition event="join_squad"          state="JoinSquad"/>
+    <transition event="create_squad"        state="CreateSquad"/>
+    <transition event="no_invite"           state="MainMenu"/>
+  </CheckInvite>
+
+  <MainMenu>
+    <resource ids="system, front_end"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="start_campaign" state="PrepareCampaign"/>
+    <transition event="start_coop"     state="PrepareCoop"/>
+    <transition event="start_warzone"  state="PrepareWarzone"/>
+  </MainMenu>
+
+  <PrepareCampaign>
+    <resource ids="system, front_end"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="next" state="LoadGameWorld"/>
+  </PrepareCampaign>
+
+  <PrepareCoop>
+    <resource ids="system, front_end"/>
+    <exception_handler ids="system_exception"/>
+    <transition event="next" state="JoinGameSession"/>
+  </PrepareCoop>
+
+  <PrepareWarzone>
+    <resource ids="system, front_end"/>
+    <transition event="create_squad" state="CreateSquad"/>
+    <transition event="find_squad" state="FindSquad"/>
+  </PrepareWarzone>
+
+  <FindSquad>
+    <resource ids="system, front_end"/>
+    <transition event="squad_found" state="JoinSquad"/>
+  </FindSquad>
+
+  <JoinSquad>
+    <resource ids="system, front_end"/>
+    <transition event="squad_joined" state="SquadLobby"/>
+  </JoinSquad>
+
+  <CreateSquad>
+    <resource ids="system, front_end, squad_session"/>
+    <transition event="squad_created" state="SquadLobby"/>
+  </CreateSquad>
+
+  <SquadLobby>
+    <resource ids="system, front_end, squad_session"/>
+    <transition event="game_session_found" state="JoinSession"/>
+  </SquadLobby>
+
+  <JoinSession>
+    <resource ids="system, front_end, squad_session, game_session"/>
+    <transition event="session_joined" state="PrepareGame"/>
+  </JoinSession>
+
+  <PrepareGame>
+    <resource ids="system, front_end, squad_session, game_session"/>
+    <transition event="load_world" state="LoadGameWorld"/>
+    <transition event="pvp_lobby" state="PvPLobby"/>
+  </PrepareGame>
+
+  <PvPLobby>
+    <resource ids="system, front_end, squad_session, game_session"/>
+    <transition event="players_ready" state="LoadGameWorld"/>
+  </PvPLobby>
+
+  <LoadGameWorld>
+    <resource ids="system, front_end, squad_session, game_session, game_world"/>
+    <transition event="game_world_loaded" state="SquadInfil"/>
+  </LoadGameWorld>
+
+  <SquadInfil>
+    <resource ids="system, front_end, squad_session, game_session, game_world"/>
+    <transition event="squad_infiled" state="InGameWorld"/>
+  </SquadInfil>
+
+  <InGameWorld>
+    <resource ids="system, front_end, squad_session, game_session, game_world"/>
+    <transition event="squad_exfil" state="SquadExfil"/>
+    <transition event="squad_failed" state="SquadFailed"/>
+    <transition event="in_game_menu" state="InGameMenu"/>
+  </InGameWorld>
+
+  <SquadExfil>
+    <resource ids="system, front_end, squad_session, game_session, game_world"/>
+    <transition event="squad_exfiled" state="SquadDebrief"/>
+  </SquadExfil>
+
+  <SquadDebrief>
+    <resource ids="system, front_end, squad_session"/>
+    <transition event="squad_ready" state="SquadLobby"/>
+  </SquadDebrief>
+
+  <SquadFailed>
+    <resource ids="system, front_end, squad_session"/>
+    <transition event="squad_ready" state="SquadLobby"/>
+  </SquadFailed>
+
+</Flow>

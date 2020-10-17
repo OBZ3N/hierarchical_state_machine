@@ -11,9 +11,6 @@
     <Filter Include="Source Files\test">
       <UniqueIdentifier>{8660e4e2-e10d-4257-b735-76a91b494e15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\test\states">
-      <UniqueIdentifier>{3858a0cd-d265-4a49-8747-76b41f7be51f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\templates">
       <UniqueIdentifier>{e0f02077-ab93-471e-9f56-5d132abf0b7b}</UniqueIdentifier>
     </Filter>
@@ -23,47 +20,14 @@
     <Filter Include="Source Files\hsm">
       <UniqueIdentifier>{cfdb1a82-bfdc-4554-9638-3e3fa731b916}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\sdl">
+      <UniqueIdentifier>{17a457a1-961b-459a-82f2-e591d5e76424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{e9e7f408-bdff-498e-9a8f-d85ed6462437}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\test\states\state_factory_table.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_pressstartscreen.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_asset.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_factory.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_game.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_generator.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_simulated_event.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_simulated_invites.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_simulated_network.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_simulated_online_services.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_simulated_session.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\test_state_base.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\test\test_utils.cpp">
       <Filter>Source Files\test</Filter>
     </ClCompile>
@@ -82,9 +46,6 @@
     <ClCompile Include="..\source\main_state_machine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\test\test_interrupts.cpp">
-      <Filter>Source Files\test</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\hsm\bitfield.cpp">
       <Filter>Source Files\hsm</Filter>
     </ClCompile>
@@ -97,95 +58,32 @@
     <ClCompile Include="..\source\hsm\state_machine_xml_loader.cpp">
       <Filter>Source Files\hsm</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_attractscreen.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_checkinvite.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_loading.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_postunloading.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_racing.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_unloading.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\test\states\state_flow_race_waitfortrackdatasync.cpp">
-      <Filter>Source Files\test\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\hsm\timer.cpp">
       <Filter>Source Files\hsm</Filter>
     </ClCompile>
     <ClCompile Include="..\source\hsm\random.cpp">
       <Filter>Source Files\hsm</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_impl_opengl2.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_impl_sdl.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_draw.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_demo.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\test\states\state_flow.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_pressstartscreen.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_asset.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_factory.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_game.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_generator.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_simulated_event.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_simulated_invites.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_simulated_network.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_simulated_online_services.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_simulated_session.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_state_base.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\test\test_utils.h">
       <Filter>Source Files\test</Filter>
     </ClInclude>
@@ -194,15 +92,6 @@
     </ClInclude>
     <ClInclude Include="..\source\tinyXML\tinyxml.h">
       <Filter>Source Files\tinyXML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_interrupts.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\test_schema.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\hsm\asset.h">
-      <Filter>Source Files\hsm</Filter>
     </ClInclude>
     <ClInclude Include="..\source\hsm\bitfield.h">
       <Filter>Source Files\hsm</Filter>
@@ -225,59 +114,254 @@
     <ClInclude Include="..\source\hsm\state_machine_xml_loader.h">
       <Filter>Source Files\hsm</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\hsm\transition.h">
-      <Filter>Source Files\hsm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_attractscreen.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_checkinvite.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_loading.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_postunloading.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_endracecutscene.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_gridcountdown.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_introcutscene.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_nextracevote.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_raceresults.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_racing.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_trackenvironment_waitforgridplayers.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_unloading.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\test\states\state_flow_race_waitfortrackdatasync.h">
-      <Filter>Source Files\test\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\hsm\timer.h">
       <Filter>Source Files\hsm</Filter>
     </ClInclude>
     <ClInclude Include="..\source\hsm\random.h">
       <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\hsm\resource.h">
+      <Filter>Source Files\hsm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_images.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_log.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_md5.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_random.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_thread.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_timer.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_touch.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_types.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_version.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_video.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\begin_code.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\close_code.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_assert.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_atomic.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_audio.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_bits.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_blendmode.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_clipboard.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_android.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_iphoneos.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_macosx.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_minimal.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_pandora.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_psp.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_windows.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_config_wiz.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_copying.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_cpuinfo.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_endian.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_error.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_events.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_gamecontroller.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_gesture.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_haptic.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_hints.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_joystick.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_keyboard.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_keycode.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_loadso.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_log.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_main.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_messagebox.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_mouse.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_mutex.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_name.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_opengl.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_opengles.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_opengles2.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_pixels.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_platform.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_power.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_quit.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_rect.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_render.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_revision.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_rwops.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_scancode.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_shape.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_stdinc.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_surface.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_system.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_syswm.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_assert.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_common.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_compare.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_crc32.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_font.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_fuzzer.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\sdl\include\SDL_test_harness.h">
+      <Filter>Source Files\sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_impl_opengl2.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_impl_sdl.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui_internal.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imconfig.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imgui.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_rectpack.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_textedit.h">
+      <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\imgui\imstb_truetype.h">
+      <Filter>Source Files\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -292,7 +376,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\xmls\state_machine.xml">
+    <Xml Include="..\xmls\state_machine_ovr_hierarchical.xml">
       <Filter>Source Files\xmls</Filter>
     </Xml>
   </ItemGroup>

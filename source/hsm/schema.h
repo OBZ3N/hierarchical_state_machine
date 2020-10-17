@@ -9,34 +9,40 @@ namespace hsm
 {
     namespace schema
     {
-        struct Asset
+        struct Resource
         {
-            std::string                                  m_state_name;
-            std::string                                  m_asset_name;
+            std::string                                  m_name;
             std::unordered_map<std::string, std::string> m_attributes;
         };
 
         struct Transition
         {
-            std::string m_event_name;
-            std::string m_next_state;
+            std::string m_event;
+            std::string m_state;
+            std::unordered_map<std::string, std::string> m_attributes;
         };
 
         struct State
         {
-            std::string                                     m_shortname;
-            std::string                                     m_fullname;
-            std::list<Asset>                                m_assets;
-            std::list<Transition>                           m_transitions;
-            std::unordered_map<std::string, std::string>    m_attributes;
+            std::string                                         m_shortname;
+            std::string                                         m_fullname;
+            std::list<Resource>                                 m_resources;
+            std::list<Transition>                               m_transitions;
+            std::list<Transition>                               m_exceptions;
+            std::unordered_map<std::string, std::string>        m_attributes;
+
+            // state hierarchy.
+            std::string                                         m_parent;
+            std::list<std::string>                              m_children;
         };
 
         // represents the entire state machine, in a flat hierarchy.
         struct StateMachine
         {
-            std::string                                             m_filename;
-            std::unordered_map<std::string, State>                  m_states;
-            std::string                                             m_initial_state;
+            std::unordered_map<std::string, State>                      m_states;
+            std::unordered_map<std::string, std::list<std::string>>     m_shortname_mappings;
+            std::string                                                 m_filename;
+            std::string                                                 m_initial_state;
         };
     }
 }

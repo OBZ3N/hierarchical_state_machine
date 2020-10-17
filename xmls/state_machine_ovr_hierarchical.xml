@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+
+<Flow>
+  <attribute cpp_filename="{Workspace}/source/states/flow_state_{Shortname}.cpp"/>
+  <attribute header_filename="{Workspace}/source/states/flow_state_{Shortname}.h"/>
+  <resource id="gear"/>
+  <resource ids="gear, eal, memtracker, debug, bloomberg, ovrnet, ovronline, invite_manager, kino, ui, scimitar, ovr"/>
+  <transition event="startup" state="Startup"/>
+  <catch_exception event="save_data_error"                         state="PressStartScreen"/>
+  <catch_exception event="network_cable_disconnect"                state="PressStartScreen"/>
+  <catch_exception event="online_service_disconnect"               state="PressStartScreen"/>
+  <catch_exception event="system_suspend"                          state="PressStartScreen"/>
+  <catch_exception event="sign_out"                                state="PressStartScreen"/>
+  <catch_exception event="signin_changed"                          state="PressStartScreen"/>
+  <catch_exception event="invite_accepted"                         state="CheckInvite" />
+  <catch_exception event="fatal_error"                             state="//"/>
+  <catch_exception event="*"                                       state="//"/>
+
+  <Startup>
+    <transition event="next" state="PressStartScreen"/>
+  </Startup>
+
+  <PressStartScreen>
+    <transition event="next" state="LoadSaveData"/>
+  </PressStartScreen>
+
+  <LoadSaveData>
+    <transition event="next" state="CheckInvite"/>
+  </LoadSaveData>
+
+  <CheckInvite>
+    <transition event="resume_campaign"     state="LoadGameWorld"/>
+    <transition event="join_coop"           state="JoinSession"/>
+    <transition event="create_coop"         state="LoadGameWorld"/>
+    <transition event="join_squad"          state="JoinSquad"/>
+    <transition event="create_squad"        state="CreateSquad"/>
+    <transition event="no_invite"           state="MainMenu"/>
+  </CheckInvite>
+
+  <FrontEnd>
+    <resource ids="frontend_world, frontend_ui, party_session, voice_chat_session"/>
+
+    <MainMenu>
+      <transition event="start_campaign" state="PrepareCampaign"/>
+      <transition event="start_coop"     state="PrepareCoop"/>
+      <transition event="start_warzone"  state="PrepareWarzone"/>
+    </MainMenu>
+
+    <PrepareCampaign>
+      <transition event="start_campaign" state="PrepareGame"/>
+    </PrepareCampaign>
+
+    <PrepareCoop>
+      <transition event="join_coop_session" state="JoinSession"/>
+    </PrepareCoop>
+
+    <PrepareWarzone>
+      <transition event="create_squad" state="CreateSquad"/>
+      <transition event="join_squad" state="JoinSquad"/>
+    </PrepareWarzone>
+
+    <Squad>
+      <resource ids="squad_session, matchmaker"/>
+      <catch_exception event="squad_error" state="MainMenu"/>
+      <catch_exception event="matchmaking_error"/>
+
+      <JoinSquad>
+        <transition event="squad_joined" state="SquadLobby"/>
+      </JoinSquad>
+
+      <CreateSquad>
+        <transition event="squad_created" state="SquadLobby"/>
+      </CreateSquad>
+
+      <SquadLobby>
+        <transition event="game_session_found" state="JoinSession"/>
+      </SquadLobby>
+
+      <GameSession>
+        <resource ids="game_session"/>
+
+        <JoinSession>
+          <transition event="session_joined" state="PrepareGame"/>
+        </JoinSession>
+
+        <PrepareGame>
+          <transition event="load_world" state="LoadGameWorld"/>
+          <transition event="pvp_lobby" state="PvPLobby"/>
+        </PrepareGame>
+
+        <PvPLobby>
+          <transition event="players_ready" state="LoadGameWorld"/>
+        </PvPLobby>
+
+        <GameWorld>
+          <resource ids="game_world"/>
+          <catch_exception event="game_session_error" game_mode="coop" state="MainMenu"/>
+          <catch_exception event="game_session_error" game_mode="warzone"  state="SquadLobby"/>
+
+          <LoadGameWorld>
+            <transition event="game_world_loaded" state="SquadInfil"/>
+          </LoadGameWorld>
+
+          <SquadInfil>
+            <transition event="squad_infiled" state="InGameWorld"/>
+          </SquadInfil>
+
+          <InGameWorld>
+            <transition event="squad_exfil" state="SquadExfil"/>
+            <transition event="squad_failed" state="SquadFailed"/>
+          </InGameWorld>
+
+          <SquadExfil>
+            <transition event="squad_exfiled" state="SquadDebrief"/>
+          </SquadExfil>
+        </GameWorld>
+      </GameSession>
+
+      <SquadDebrief>
+        <transition event="squad_ready" state="SquadLobby"/>
+      </SquadDebrief>
+
+      <SquadFailed>
+        <transition event="squad_ready" state="SquadLobby"/>
+      </SquadFailed>
+    
+  </Squad>
+  </FrontEnd>
+</Flow>

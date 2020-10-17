@@ -59,7 +59,7 @@ namespace hsm
     // - '..\' specified : we're going into the parent of our parent.
     // - specifying '\\' means we're indexing from the root, and it's an absolute path.
     // [TODO] maybe think of a better way.
-    std::string StateMachineXmlLoader::evaluateStateFullNameFromReference( std::string current_path, std::string state_ref ) const
+    std::string StateMachineXmlLoader::evaluateStateFullNameFromRelativeName( std::string current_path, std::string state_ref ) const
     {
         // first, replace all '/' into '\'.
         size_t pos = state_ref.find( "/" );
@@ -112,46 +112,99 @@ namespace hsm
 
     bool StateMachineXmlLoader::validateSchema()
     {
-        if ( m_schema.m_initial_state == "" )
+        if (m_schema.m_initial_state == "")
         {
-            logDebug( debug::LogLevel::Error, "starting transition is undefined." );
+            logDebug(debug::LogLevel::Error, "starting transition is undefined.");
             return false;
         }
 
-        for ( auto& kt : m_schema.m_states )
+        for (auto& kt : m_schema.m_states)
         {
             schema::State& state = kt.second;
 
-            std::string current_path = state.m_fullname;
-
-            for ( auto& transition : state.m_transitions )
+            for (auto& transition : state.m_transitions)
             {
-                std::string state_ref = transition.m_next_state;
-                
-                std::string next_state_fullname = evaluateStateFullNameFromReference( current_path, state_ref );
+                validateTransition(state, transition);
+            }
 
-                auto jt = m_schema.m_states.find( next_state_fullname );
+            for (auto& exception : state.m_exceptions)
+            {
+                validateTransition(state, exception);
+            }
+        }
+        return true;
+    }
 
-                if ( jt == m_schema.m_states.end() )
+    bool StateMachineXmlLoader::validateTransition(const schema::State& parent_state, schema::Transition& transition)
+    {
+        std::string current_path = parent_state.m_fullname;
+
+        std::string state_ref = transition.m_state;
+
+        std::string next_state_fullname = evaluateStateFullNameFromRelativeName( current_path, state_ref );
+
+        auto jt = m_schema.m_states.find( next_state_fullname );
+
+        if ( jt == m_schema.m_states.end() )
+        {
+            auto it = m_schema.m_shortname_mappings.find(state_ref);
+
+            if (it == m_schema.m_shortname_mappings.end())
+            {
+                logDebug(debug::LogLevel::Error, "<%s> transition('%s', '%s') evaluated to state <%s>, but cannot be found in the schema.",
+                    parent_state.m_fullname.c_str(),
+                    transition.m_event.c_str(),
+                    transition.m_state.c_str(),
+                    next_state_fullname.c_str());
+            }
+            else
+            {
+                const std::list<std::string>& states = it->second;
+
+                next_state_fullname = states.front();
+
+                if (states.size() != 1)
                 {
-                    logDebug( debug::LogLevel::Error, "<%s> transition('%s', '%s') evaluated to state <%s>, but cannot be found in the schema.",
-                        state.m_fullname.c_str(),
-                        transition.m_event_name.c_str(),
-                        transition.m_next_state.c_str(),
-                        next_state_fullname.c_str() );
+                    if (states.empty())
+                    {
+                        logDebug(debug::LogLevel::Fatal, "<%s> transition('%s', '%s') evaluated to state <%s>, but no state found with that name.",
+                            parent_state.m_fullname.c_str(),
+                            transition.m_event.c_str(),
+                            transition.m_state.c_str(),
+                            next_state_fullname.c_str());
+                    }
+                    else
+                    {
+                        logDebug(debug::LogLevel::Error, "<%s> transition('%s', '%s') evaluated to state <%s>, but found multiple states with the name.",
+                            parent_state.m_fullname.c_str(),
+                            transition.m_event.c_str(),
+                            transition.m_state.c_str(),
+                            next_state_fullname.c_str());
+                    }
                 }
                 else
                 {
-                    logDebug( debug::LogLevel::Trace, "<%s> transition('%s', '%s') evaluated next state to <%s>.",
-                        state.m_fullname.c_str(),
-                        transition.m_event_name.c_str(),
-                        transition.m_next_state.c_str(),
-                        next_state_fullname.c_str() );
+                    logDebug(debug::LogLevel::Trace, "<%s> transition('%s', '%s') evaluated next state to <%s>.",
+                        parent_state.m_fullname.c_str(),
+                        transition.m_event.c_str(),
+                        transition.m_state.c_str(),
+                        next_state_fullname.c_str());
 
                     // assign the full name.
-                    transition.m_next_state = next_state_fullname;
+                    transition.m_state = next_state_fullname;
                 }
             }
+        }
+        else
+        {
+            logDebug( debug::LogLevel::Trace, "<%s> transition('%s', '%s') evaluated next state to <%s>.",
+                parent_state.m_fullname.c_str(),
+                transition.m_event.c_str(),
+                transition.m_state.c_str(),
+                next_state_fullname.c_str() );
+
+            // assign the full name.
+            transition.m_state = next_state_fullname;
         }
         return true;
     }
@@ -163,6 +216,19 @@ namespace hsm
         string.assign( indent * 2, ' ' );
 
         return string;
+    }
+
+    std::string trim(const std::string& str)
+    {
+        std::string result = str;
+
+        auto it1 = std::find_if(result.rbegin(), result.rend(), [](char ch) { return !std::isspace<char>(ch, std::locale::classic()); });
+        result.erase(it1.base(), result.end());
+
+        auto it2 = std::find_if(result.begin(), result.end(), [](char ch) { return !std::isspace<char>(ch, std::locale::classic()); });
+        result.erase(result.begin(), it2);
+
+        return result;
     }
 
     bool StateMachineXmlLoader::isValidStateName( const std::string& name ) const
@@ -179,12 +245,16 @@ namespace hsm
             return false;
         }
 
-        if ( name == "asset" )
+        if ( name == "resource" )
         {
             return false;
         }
 
         if ( name == "transition" )
+        {
+            return false;
+        }
+        if (name == "catch_exception")
         {
             return false;
         }
@@ -200,6 +270,8 @@ namespace hsm
 
         std::ostringstream debug_stream;
         std::string indent_string = indentString( indent );
+
+        schema::State* current_state = nullptr;
 
         switch ( type )
         {
@@ -220,7 +292,7 @@ namespace hsm
                     {
                         for ( const TiXmlAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next() )
                         {
-                            debug_stream << indent_string << " - attribute " << attr->NameTStr() << " = '" << attr->ValueStr() << "'" << std::endl;
+                            debug_stream << indent_string << " - attribute " << attr->NameTStr() << "='" << attr->ValueStr() << "'" << std::endl;
 
                             state->m_attributes[ attr->NameTStr() ] = attr->ValueStr();
                         }
@@ -231,43 +303,97 @@ namespace hsm
                     if ( state != nullptr )
                     {
                         const char* event_value = element->Attribute( "event" );
-                        const char* next_state_value = element->Attribute( "next_state" );
+                        const char* next_state_value = element->Attribute( "state" );
 
                         if ( event_value != nullptr && next_state_value != nullptr )
                         {
-                            debug_stream << indent_string << " - transition " << event_value << " ----> <" << next_state_value << ">" << std::endl;
+                            debug_stream << indent_string << " - transition";
 
                             schema::Transition transition;
-                            transition.m_event_name = event_value;
-                            transition.m_next_state = next_state_value;
+                            transition.m_event = event_value;
+                            transition.m_state = next_state_value;
+
+                            // add state attributes.
+                            for (const TiXmlAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next())
+                            {
+                                debug_stream << " " << attr->NameTStr() << "='" << attr->ValueStr() << "'";
+
+                                transition.m_attributes[attr->NameTStr()] = attr->ValueStr();
+                            }
+                            debug_stream << "." << std::endl;
 
                             state->m_transitions.push_back( transition );
                         }
                     }
                 }
-                else if ( element->ValueStr() == "asset" )
+                else if ( element->ValueStr() == "resource" )
                 {
                     if ( state != nullptr )
                     {
-                        const char* asset_name = element->Attribute( "id" ); // single asset loaded.
+                        const char* resource_name = element->Attribute( "id" ); // single resource loaded.
+                        const char* resources_name = element->Attribute("ids"); // single resource loaded.
 
-                        if ( asset_name != nullptr )
+                        if (resource_name != nullptr )
                         {
-                            debug_stream << indent_string << " - asset";
+                            debug_stream << indent_string << " - resource";
 
-                            schema::Asset asset;
-                            asset.m_asset_name = asset_name;
-                            asset.m_state_name = state->m_fullname;
+                            schema::Resource resource;
+                            resource.m_name = resource_name;
 
                             // add state attributes.
                             for ( const TiXmlAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next() )
                             {
-                                debug_stream << " " << attr->NameTStr() << " = '" << attr->ValueStr() << "'";
+                                debug_stream << " " << attr->NameTStr() << "='" << attr->ValueStr() << "'";
 
-                                asset.m_attributes[ attr->NameTStr() ] = attr->ValueStr();
+                                resource.m_attributes[ attr->NameTStr() ] = attr->ValueStr();
                             }
                             debug_stream << "." << std::endl;
-                            state->m_assets.push_back( asset );
+                            state->m_resources.push_back(resource);
+                        }
+                        else if (resources_name != nullptr)
+                        {
+                            debug_stream << indent_string << " - resources ids='" << resources_name << "'." << std::endl;
+                            
+                            std::regex pattern{ "\\,+" };
+                            std::string str{ resources_name };
+
+                            // Vector to store tokens
+                            std::vector<std::string> tokens { std::sregex_token_iterator(str.begin(), str.end(), pattern, -1), std::sregex_token_iterator() };
+
+                            for (auto token : tokens)
+                            {
+                                schema::Resource resource;
+                                resource.m_name = trim(token);
+                                state->m_resources.push_back(resource);
+                            }
+                        }
+                    }
+                }
+                else if (element->ValueStr() == "catch_exception")
+                {
+                    if (state != nullptr)
+                    {
+                        const char* event_value = element->Attribute("event");
+                        const char* next_state_value = element->Attribute("state");
+
+                        if (event_value != nullptr && next_state_value != nullptr)
+                        {
+                            debug_stream << indent_string << " - catch_exception";
+
+                            schema::Transition exception;
+                            exception.m_event = event_value;
+                            exception.m_state = next_state_value;
+                            
+                            // add state attributes.
+                            for (const TiXmlAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next())
+                            {
+                                debug_stream << " " << attr->NameTStr() << "='" << attr->ValueStr() << "'";
+
+                                exception.m_attributes[attr->NameTStr()] = attr->ValueStr();
+                            }
+                            debug_stream << "." << std::endl;
+
+                            state->m_exceptions.push_back(exception);
                         }
                     }
                 }
@@ -296,19 +422,30 @@ namespace hsm
 
                     m_schema.m_states[ new_state.m_fullname ] = new_state;
 
+                    schema::State* parent_state = state;
+
                     state = &m_schema.m_states[ new_state.m_fullname ];
 
-                    debug_stream << indent_string << "<" << new_state.m_fullname << ">" << std::endl;
+                    debug_stream << indent_string << "<" << new_state.m_shortname << ">" << std::endl;
 
                     if ( state != nullptr )
                     {
                         // add state attributes.
                         for ( const TiXmlAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next() )
                         {
-                            debug_stream << indent_string << " - attribute " << attr->NameTStr() << " = '" << attr->ValueStr() << "'" << std::endl;
+                            debug_stream << indent_string << " - attribute " << attr->NameTStr() << "='" << attr->ValueStr() << "'" << std::endl;
 
                             state->m_attributes[ attr->NameTStr() ] = attr->ValueStr();
                         }
+
+                        if (parent_state != nullptr)
+                        {
+                            parent_state->m_children.push_back(state->m_fullname);
+
+                            state->m_parent = parent_state->m_fullname;
+                        }
+
+                        m_schema.m_shortname_mappings[new_state.m_shortname].push_back(new_state.m_fullname);
                     }
                 }
                 break;

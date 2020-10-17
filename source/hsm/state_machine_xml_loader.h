@@ -30,11 +30,13 @@ namespace hsm
 
         bool isValidStateName(const std::string& name) const;
 
-        std::string evaluateStateFullNameFromReference(std::string current_path, std::string state_ref) const;
+        std::string evaluateStateFullNameFromRelativeName(std::string current_path, std::string state_ref) const;
 
         std::string indentString(int indent) const;
 
         bool validateSchema();
+
+        bool validateTransition(const schema::State& parent_state, schema::Transition& transition);
 
         bool isValidStateName(std::string& name) const;
 
