@@ -18,6 +18,11 @@ namespace hsm
     class StateMachine
     {
     public:
+        static bool isTransition(const schema::Transition& a, const schema::Transition& b, bool ignore_state = true);
+        static std::string transitionToString(const schema::Transition& transition, bool output_state = false);
+        static std::string attributesToString(const std::unordered_map<std::string, std::string>& attributes);
+
+    public:
         StateMachine( const schema::StateMachine& schema, StateMachineFactory* factory );
         ~StateMachine();
 
@@ -46,7 +51,7 @@ namespace hsm
         const schema::Transition* getCurrentTransition() const;
 
         const std::string& getStatusString() const { return m_statusString; }
-        
+
     private:
         void updateStatus_LoadResources();
         void updateStatus_EnterState();

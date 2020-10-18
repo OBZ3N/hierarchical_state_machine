@@ -324,10 +324,7 @@ public:
         {
             for (const auto& exception : state->getSchema().m_exceptions)
             {
-                if (exception.m_event != "*")
-                {
-                    exceptions.push_back(&exception);
-                }
+                 exceptions.push_back(&exception);
             }
         }
 
@@ -335,7 +332,7 @@ public:
         {
             auto it = std::find_if(thrownExceptions.begin(), thrownExceptions.end(), [&exception](const hsm::schema::Transition* ex)
             {
-                return (ex->m_event == exception->m_event && ex->m_attributes == exception->m_attributes);
+                return state_machine->isTransition(*exception, *ex);
             });
 
             bool was_thrown = it != thrownExceptions.end();

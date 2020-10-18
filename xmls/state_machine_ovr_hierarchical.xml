@@ -5,7 +5,6 @@
   <attribute header_filename="{Workspace}/source/states/flow_state_{Shortname}.h"/>
   <resource id="gear"/>
   <resource ids="gear, eal, memtracker, debug, bloomberg, ovrnet, ovronline, invite_manager, kino, ui, scimitar, ovr"/>
-  <transition event="startup" state="Startup"/>
   <catch_exception event="save_data_error"                         state="PressStartScreen"/>
   <catch_exception event="network_cable_disconnect"                state="PressStartScreen"/>
   <catch_exception event="online_service_disconnect"               state="PressStartScreen"/>
@@ -15,10 +14,7 @@
   <catch_exception event="invite_accepted"                         state="CheckInvite" />
   <catch_exception event="fatal_error"                             state="//"/>
   <catch_exception event="*"                                       state="//"/>
-
-  <Startup>
-    <transition event="next" state="PressStartScreen"/>
-  </Startup>
+  <transition event="startup" state="PressStartScreen"/>
 
   <PressStartScreen>
     <transition event="next" state="LoadSaveData"/>

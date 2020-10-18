@@ -12,6 +12,72 @@
 
 namespace hsm
 {
+    // HELPERS.
+    bool StateMachine::isTransition(const schema::Transition& a, const schema::Transition& b, bool ignore_state)
+    {
+        if (a.m_event != b.m_event)
+            return false;
+
+        for (auto attr : a.m_attributes)
+        {
+            if (ignore_state && attr.first == "state")
+                continue;
+
+            // check if current resource is required.
+            auto it = std::find(b.m_attributes.begin(), b.m_attributes.end(), attr);
+
+            if (it == b.m_attributes.end())
+                return false;
+        }
+        return true;
+    }
+
+    std::string StateMachine::transitionToString(const schema::Transition& transition, bool output_state)
+    {
+        std::string attr_str = attributesToString(transition.m_attributes);
+
+        std::string str;
+        std::ostringstream stream(str);
+
+        if (attr_str.empty())
+        {
+            stream << transition.m_event;
+        }
+        else
+        {
+            stream << transition.m_event << " [" << attr_str << "]";
+        }
+
+        if (output_state)
+        {
+            stream << " ---> " << transition.m_state;
+        }
+
+        return str;
+    }
+
+    std::string StateMachine::attributesToString(const std::unordered_map<std::string, std::string>& attributes)
+    {
+        if (attributes.empty())
+            return std::string();
+
+        std::string str;
+        std::ostringstream stream(str);
+        for (auto it = attributes.begin(); it != attributes.end(); ++it)
+        {
+            if (it != attributes.begin())
+            {
+                stream << ", ";
+            }
+            stream << it->first << "=" << it->second;
+        }
+        return str;
+    }
+}
+
+
+namespace hsm
+{
     StateMachine::StateMachine( const schema::StateMachine& schema, StateMachineFactory* factory )
         : m_schema( schema )
         , m_factory( factory )
@@ -90,12 +156,14 @@ namespace hsm
     // loading the schemas and initialising the states.
     void StateMachine::start( std::string& initial_state )
     {
-        // already started.
-        if (isStarted())
-            return;
+        // clear all current transitions and exceptions.
+        m_transition = schema::Transition();
+        m_start = schema::Transition();
+        m_stop = schema::Transition();
+        m_exceptions.clear();
 
         m_start.m_state = initial_state.empty() ? m_schema.m_initial_state : initial_state;
-        m_start.m_event = "_enter";
+        m_start.m_event = "runtime_enter";
 
         m_statusString = "STARTING";
     }
@@ -103,29 +171,34 @@ namespace hsm
     // loading the schemas and initialising the states.
     void StateMachine::restart( std::string& initial_state )
     {
+        // clear all current transitions and exceptions.
+        m_transition = schema::Transition();
+        m_start = schema::Transition();
+        m_stop = schema::Transition();
+        m_exceptions.clear();
+
         // first, do an exit transition.
         m_stop.m_state = "";
-        m_stop.m_event = "_exit";
+        m_stop.m_event = "runtime_exit";
 
-        // second, cache a new restart transition.
+        // then second, cache a new start transition.
         m_start.m_state = initial_state.empty() ? m_schema.m_initial_state : initial_state;
-        m_start.m_event = "_enter";
+        m_start.m_event = "runtime_enter";
 
         m_statusString = "RESTARTING";
     }
 
     void StateMachine::stop()
     {
-        // already stopped.
-        if (isStopped())
-            return;
-
-        // clear the start request.
+        // clear all current transitions and exceptions.
+        m_transition = schema::Transition();
         m_start = schema::Transition();
+        m_stop = schema::Transition();
+        m_exceptions.clear();
 
-        m_stop.m_event = "_exit";
+        m_stop.m_event = "runtime_exit";
         m_stop.m_state = "";
-
+        
         m_statusString = "STOPPING";
     }
 
@@ -204,88 +277,95 @@ namespace hsm
 
     void StateMachine::setTransition(const State& from_state, const std::string& event_name, const std::unordered_map<std::string, std::string>& attributes, const std::string& message)
     {
-        // find the transition definition.
-        for (auto transition_schema : from_state.getSchema().m_transitions)
+        if (!m_exceptions.empty())
         {
-            if (transition_schema.m_event == event_name && attributes == transition_schema.m_attributes)
+            logDebug(debug::LogLevel::Warning, "(%d) exceptions have been thrown. Cannot set new transtion '%s' from state '%s'.", m_exceptions.size(), event_name.c_str(), from_state.getSchema().m_shortname.c_str());
+            return;
+        }
+
+        schema::Transition transition;
+        transition.m_event = event_name;
+        transition.m_attributes = attributes;
+        transition.m_attributes["event"] = event_name;
+        transition.m_attributes["runtime_message"] = message;
+
+        // find the schema corresponding to the transition.
+        const schema::Transition* transition_schema = nullptr;
+        for (const auto& t : from_state.getSchema().m_transitions)
+        {
+            if(isTransition(t, transition))
             {
-                if (m_factory == nullptr)
+                transition_schema = &t;
+                break;
+            }
+        }
+
+        if (transition_schema == nullptr)
+        {
+            logDebug(debug::LogLevel::Error, "Cannot find transition {%s} schema in state '%s'.", transitionToString(transition).c_str(), from_state.getSchema().m_shortname.c_str());
+            return;
+        }
+        else
+        {
+            logDebug(debug::LogLevel::Info, "transition {%s} called from state '%s'.", transitionToString(transition).c_str(), from_state.getSchema().m_fullname.c_str());
+            transition.m_state = transition_schema->m_state;
+            transition.m_attributes["state"] = transition_schema->m_state;
+            m_transition = transition;
+            return;
+        }
+    }
+
+    void StateMachine::throwException(const std::string& event_name, const std::unordered_map<std::string, std::string>& attributes, const std::string& message)
+    {
+        schema::Transition exception;
+        exception.m_event = event_name;
+        exception.m_attributes = attributes;
+        exception.m_attributes["event"] = event_name;
+        exception.m_attributes["runtime_message"] = message;
+
+        // Find current state that catches the exception, from bottom up.
+        const State* exception_handler = nullptr;
+        const schema::Transition* exception_catch = nullptr;
+        for (auto it = m_statesToUpdate.begin(); it != m_statesToUpdate.end(); ++it)
+        {
+            auto state = *it;
+
+            // check the transition handlers in that state.
+            for (const auto& exception_schema : state->getSchema().m_exceptions)
+            {
+                if (isTransition(exception_schema, exception))
                 {
-                    logDebug(debug::LogLevel::Error, "Factory is nullptr.");
-                }
-                else
-                {
-                    // transition found.
-                    m_transition = transition_schema;
+                    exception_handler = state;
+                    exception_catch = &exception_schema;
                     break;
                 }
             }
         }
 
-        if (attributes.empty())
+        // no state found that can handle that exception.
+        if (exception_handler == nullptr)
         {
-            logDebug(debug::LogLevel::Info, "transition '%s' called from state '%s'.", event_name.c_str(), from_state.getSchema().m_fullname.c_str());
+            logDebug(debug::LogLevel::Error, "Cannot find exception handler for {%s}.", transitionToString(exception).c_str());
+            
+            static bool s_exitIfUnhandledException = false;
+            if (s_exitIfUnhandledException)
+            {
+                schema::Transition unhandled_exception;
+                unhandled_exception.m_event = "*";
+                unhandled_exception.m_state = "\\";
+                unhandled_exception.m_attributes["unhandled_exception"] = transitionToString(exception, true);
+                m_exceptions.push_back(unhandled_exception);
+            }
+            return;
         }
         else
         {
-            std::string str;
-            std::ostringstream stream(str);
-            for (auto it = attributes.begin(); it != attributes.end(); ++it)
-            {
-                if (it != attributes.begin())
-                {
-                    stream << ", ";
-                }
-                stream << it->first << "=" << it->second;
-            }
-            logDebug(debug::LogLevel::Info, "transition '%s' [%s] called from state '%s'.", event_name.c_str(), str.c_str(), from_state.getSchema().m_fullname.c_str());
-        }
-    }
-
-    void StateMachine::throwException(const std::string& name, const std::unordered_map<std::string, std::string>& attributes, const std::string& message)
-    {
-        // start updating states, from the bottom up.
-        for (auto it = m_statesToUpdate.rbegin(); it != m_statesToUpdate.rend(); ++it)
-        {
-            auto state = *it;
-
-            // find the transition definition.
-            for (auto exception_schema : state->getSchema().m_exceptions)
-            {
-                if (exception_schema.m_event == name && attributes == exception_schema.m_attributes)
-                {
-                    if (m_factory == nullptr)
-                    {
-                        logDebug(debug::LogLevel::Error, "Factory is nullptr.");
-                    }
-                    else
-                    {
-                        // transition found.
-                        m_exceptions.push_back(exception_schema);
-                        m_transition = schema::Transition();
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (attributes.empty())
-        {
-            logDebug(debug::LogLevel::Warning, "exception '%s' thrown.", name.c_str());
-        }
-        else
-        {
-            std::string str;
-            std::ostringstream stream(str);
-            for (auto it = attributes.begin(); it != attributes.end(); ++it)
-            {
-                if (it != attributes.begin())
-                {
-                    stream << ", ";
-                }
-                stream << it->first << "=" << it->second;
-            }
-            logDebug(debug::LogLevel::Warning, "exception '%s' [%s] thrown.", name.c_str(), str.c_str());
+            logDebug(debug::LogLevel::Info, "exception {%s} handled by state '%s'.", transitionToString(exception).c_str(), exception_handler->getSchema().m_shortname.c_str());
+            exception.m_state = exception_catch->m_state;
+            exception.m_attributes["state"] = exception_catch->m_state;
+            m_exceptions.push_back(exception);
+            m_transition = schema::Transition(); // clear whatever transition we've fired.
+            return;
         }
     }
 
